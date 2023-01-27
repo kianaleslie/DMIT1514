@@ -13,6 +13,9 @@ namespace Lesson05_Animations
         private int celIndex;
         private float celTimeElapsed;
         private Rectangle celSourceRectangle;
+        const int rowCount = 2;
+        const int columnCount = 11;
+        const int spriteCount = 19;
 
         /// <summary>
         /// Begins or continues playback of a CelAnimationSequence.
@@ -52,6 +55,16 @@ namespace Lesson05_Animations
                     celTimeElapsed -= celAnimationSequence.CelTime;
 
                     // Advance the frame index looping as appropriate...
+                    //int row = 0;
+                    //int column = 0;
+                    //for (int i = 0; i < spriteCount; ++i)
+                    //{
+                    //    row = i / columnCount;
+                    //    column = i % columnCount;
+                    //}
+                    //int width = celAnimationSequence.Texture.Width / columnCount;
+                    //int height = celAnimationSequence.Texture.Height / rowCount;
+                    //Rectangle sourceRectangle = new Rectangle(column * width, row * height, width, height);
                     celIndex = (celIndex + 1) % celAnimationSequence.CelCount;
 
                     celSourceRectangle.X = celIndex * celSourceRectangle.Width;

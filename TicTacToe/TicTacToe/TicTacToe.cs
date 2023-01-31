@@ -9,19 +9,45 @@ namespace TicTacToe
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        Texture2D backgroundImage;
-        Texture2D xImage;
-        Texture2D oImage;
+        Texture2D backgroundTexture;
+        Texture2D xTexture;
+        Texture2D oTexture;
 
-        const int WindowWidth = 170;
-        const int WindowHeight = 170;
+        Rectangle oRectangle, xRectangle, backgroundRectangle;
 
-        MouseState currentMouseState;
-        MouseState previousMouseState;
+        const int WINDOWWIDTH = 170;
+        const int WINDOWHEIGHT = 170;
 
+        public enum GameState
+        {
+            Initialize, 
+            SwapTurn,
+            ExecuteTurn,
+            EvaluateBoard,
+            GameEnd
+        }
+        GameState currrentGameState = GameState.Initialize;
+        public enum MouseButtonStates
+        {
+            IsPressed,
+            IsReleased,
+            WasPressed,
+            WasReleased
+        }
+        MouseButtonStates currentMouseState = MouseButtonStates.IsReleased;
+        public enum Turn
+        {
+            XTurn,
+            OTurn,
+        }
+        Turn currentTurn = Turn.XTurn;
+
+        Rectangle[,] GameBoard = new Rectangle[3,3]; //set number of elements - using an array is easier 
         public TicTacToe()
         {
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferHeight = WINDOWHEIGHT;
+            _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -38,9 +64,9 @@ namespace TicTacToe
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            backgroundImage = Content.Load<Texture2D>("TicTacToeBoard");
-            xImage = Content.Load<Texture2D>("X");
-            oImage = Content.Load<Texture2D>("O");
+            backgroundTexture = Content.Load<Texture2D>("TicTacToeBoard");
+            xTexture = Content.Load<Texture2D>("X");
+            oTexture = Content.Load<Texture2D>("O");
         }
 
         protected override void Update(GameTime gameTime)
@@ -49,7 +75,39 @@ namespace TicTacToe
                 Exit();
 
             // TODO: Add your update logic here
-            currentMouseState = Mouse.GetState();
+            switch (currrentGameState)
+            {
+                case GameState.Initialize:
+                    break;
+                case GameState.SwapTurn:
+                    break;
+                case GameState.ExecuteTurn:
+                    break;
+                case GameState.EvaluateBoard:
+                    break;
+                case GameState.GameEnd:
+                    break;
+                default:
+                    break;
+            }
+            switch (currentMouseState)
+            {
+                case MouseButtonStates.IsPressed:
+                    if (Mouse.GetState().LeftButton == ButtonState.Released)
+                    {
+                        currentMouseState = MouseButtonStates.WasReleased;
+                    }
+                    break;
+                case MouseButtonStates.IsReleased:
+                    if(Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    {
+                        currentMouseState = MouseButtonStates.WasPressed;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            currentMouseState = (MouseButtonStates)Mouse.GetState().LeftButton;
             base.Update(gameTime);
         }
 
@@ -59,7 +117,7 @@ namespace TicTacToe
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            _spriteBatch.Draw(backgroundImage, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(backgroundTexture, Vector2.Zero, Color.White);
             _spriteBatch.End();
             base.Draw(gameTime);
         }

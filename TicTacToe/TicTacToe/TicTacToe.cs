@@ -108,6 +108,7 @@ namespace TicTacToe
                     break;
             }
             currentMouseState = (MouseButtonStates)Mouse.GetState().LeftButton;
+
             base.Update(gameTime);
         }
 
@@ -118,6 +119,10 @@ namespace TicTacToe
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             _spriteBatch.Draw(backgroundTexture, Vector2.Zero, Color.White);
+            if(currentMouseState == MouseButtonStates.IsReleased)
+            {
+                _spriteBatch.Draw(xTexture, Vector2.Zero, Color.White);
+            }
             _spriteBatch.End();
             base.Draw(gameTime);
         }

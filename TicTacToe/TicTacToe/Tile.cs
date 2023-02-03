@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace TicTacToe
 {
-    internal class Tile
+    public class Tile
     {
         public enum TileStates
         {
@@ -32,6 +32,19 @@ namespace TicTacToe
         public void Reset()
         {
             TileState = TileStates.Blank;
+        }
+        public void SetState(TileStates state)
+        {
+            TileState = state;
+        }
+        public bool TrySetState(Point point, TileStates state)
+        {
+            if (TileState == TileStates.Blank && Rectangle.Contains(point))
+            {
+                SetState(state);
+                return true;
+            }
+            return false;
         }
     }
 }

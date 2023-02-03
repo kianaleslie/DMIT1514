@@ -14,14 +14,14 @@ namespace TicTacToe
         Texture2D oTexture;
         Texture2D Blank;
 
-        Rectangle oRectangle, xRectangle, backgroundRectangle;
+        Rectangle oRectangle, xRectangle, boardRectangle;
 
         const int WINDOWWIDTH = 170;
         const int WINDOWHEIGHT = 170;
 
         public enum GameState
         {
-            Initialize, 
+            Initialize,
             SwapTurn,
             ExecuteTurn,
             EvaluateBoard,
@@ -43,14 +43,7 @@ namespace TicTacToe
         }
         Turn currentTurn = Turn.XTurn;
 
-        Rectangle[,] GameBoard = new Rectangle[3,3]; //set number of elements - using an array is easier 
-        public enum TileStates
-        { 
-        BlankState, 
-        XTileState,
-        YTileState,
-        }
-        TileStates currentTileState = TileStates.BlankState;
+        Rectangle[,] GameBoard = new /*Tile*/ Rectangle[3, 3]; 
         public TicTacToe()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -58,7 +51,7 @@ namespace TicTacToe
             _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-           //Blank = new Texture2D(GraphicsDevice, 50, 50);
+            //Blank = new Texture2D(GraphicsDevice, 50, 50);
         }
 
         protected override void Initialize()
@@ -108,7 +101,7 @@ namespace TicTacToe
                     }
                     break;
                 case MouseButtonStates.IsReleased:
-                    if(Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                     {
                         currentMouseState = MouseButtonStates.WasPressed;
                     }
@@ -128,20 +121,6 @@ namespace TicTacToe
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             _spriteBatch.Draw(boardTexture, Vector2.Zero, Color.White);
-            //if(currentMouseState == MouseButtonStates.IsReleased)
-            //{
-            //    _spriteBatch.Draw(xTexture, Vector2.Zero, Color.White);
-            //}
-            //for(int currentRow =0; currentRow < 3; currentRow++)
-            //{
-            //    for (int currentCol = 0; currentCol < 3; currentCol++)
-            //    {
-            //        if (/*currentTileState[currentCol, currentRow]*/ != TileStates.BlankState)
-            //        {
-            //            _spriteBatch.Draw(boardTexture, Vector2.Zero, Color.White);
-            //        }
-            //    }
-            //}
             _spriteBatch.End();
             base.Draw(gameTime);
         }

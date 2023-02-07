@@ -9,9 +9,20 @@ namespace DMIT1514_Lab2_Kiana_Leslie
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        Texture2D boardTexture;
+        Texture2D xTexture;
+        Texture2D oTexture;
+        Texture2D Blank;
+
+        Rectangle oRectangle, xRectangle, boardRectangle;
+
+        const int WINDOWWIDTH = 170;
+        const int WINDOWHEIGHT = 170;
         public TicTacToe()
         {
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferHeight = WINDOWHEIGHT;
+            _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -19,7 +30,6 @@ namespace DMIT1514_Lab2_Kiana_Leslie
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
@@ -27,7 +37,9 @@ namespace DMIT1514_Lab2_Kiana_Leslie
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            boardTexture = Content.Load<Texture2D>("TicTacToeBoard");
+            xTexture = Content.Load<Texture2D>("X");
+            oTexture = Content.Load<Texture2D>("O");
         }
 
         protected override void Update(GameTime gameTime)

@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin File.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:File.spritefont;FredokaOne-Regular.spritefont
+
+#begin FredokaOne-Regular.ttf
+/importer:
+/processor:
+/build:FredokaOne-Regular.ttf
+
 #begin O.png
 /importer:TextureImporter
 /processor:TextureProcessor

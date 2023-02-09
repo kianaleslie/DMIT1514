@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kleslie7\\Documents\\GitHub\\DMIT1514\\BouncyImages\\BouncyImages\\BouncyImages\\BouncyImages.csproj": {}
+    "C:\\Users\\kiana\\OneDrive\\Documents\\GitHub\\DMIT1514\\BouncyImages\\BouncyImages\\BouncyImages\\BouncyImages.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kleslie7\\Documents\\GitHub\\DMIT1514\\BouncyImages\\BouncyImages\\BouncyImages\\BouncyImages.csproj": {
+    "C:\\Users\\kiana\\OneDrive\\Documents\\GitHub\\DMIT1514\\BouncyImages\\BouncyImages\\BouncyImages\\BouncyImages.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kleslie7\\Documents\\GitHub\\DMIT1514\\BouncyImages\\BouncyImages\\BouncyImages\\BouncyImages.csproj",
+        "projectUniqueName": "C:\\Users\\kiana\\OneDrive\\Documents\\GitHub\\DMIT1514\\BouncyImages\\BouncyImages\\BouncyImages\\BouncyImages.csproj",
         "projectName": "BouncyImages",
-        "projectPath": "C:\\Users\\kleslie7\\Documents\\GitHub\\DMIT1514\\BouncyImages\\BouncyImages\\BouncyImages\\BouncyImages.csproj",
-        "packagesPath": "C:\\Users\\kleslie7\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kleslie7\\Documents\\GitHub\\DMIT1514\\BouncyImages\\BouncyImages\\BouncyImages\\obj\\",
+        "projectPath": "C:\\Users\\kiana\\OneDrive\\Documents\\GitHub\\DMIT1514\\BouncyImages\\BouncyImages\\BouncyImages\\BouncyImages.csproj",
+        "packagesPath": "C:\\Users\\kiana\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\kiana\\OneDrive\\Documents\\GitHub\\DMIT1514\\BouncyImages\\BouncyImages\\BouncyImages\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\kleslie7\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\kiana\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

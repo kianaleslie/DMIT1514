@@ -24,11 +24,6 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             Rectangle = rectangle;
             TileState = TileStates.Blank;
         }
-        public Tile(Rectangle rectangle, TileStates tileState)
-        {
-            Rectangle = rectangle;
-            TileState = tileState;
-        }
         public void Reset()
         {
             TileState = TileStates.Blank;

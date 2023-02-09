@@ -12,38 +12,28 @@ namespace DMIT1514_Lab2_Kiana_Leslie
         Texture2D boardTexture;
         Texture2D xTexture;
         Texture2D oTexture;
-        Texture2D Blank;
-
-        Rectangle oRectangle, xRectangle, boardRectangle;
 
         const int WINDOWWIDTH = 170;
         const int WINDOWHEIGHT = 170;
-        public enum GameSpaceState
+        public enum BoardState
         {
-            Empty,
+            Blank,
             X,
             O
         }
-        GameSpaceState nextTokenToBePlayed;
+        BoardState nextMove;
 
-        Tile[,] GameBoard =
-            new Tile[3, 3];
-        //{
-        //    {GameSpaceState.Empty, GameSpaceState.Empty, GameSpaceState.Empty},
-        //    {GameSpaceState.Empty, GameSpaceState.Empty, GameSpaceState.Empty},
-        //    {GameSpaceState.Empty, GameSpaceState.Empty, GameSpaceState.Empty}
-
-        //};
-
-        public enum MouseButtonStates
+        Tile[,] GameBoard = new Tile[3, 3];
+        public enum MouseStates
         {
             IsPressed,
             IsReleased,
             WasPressed,
             WasReleased
         }
-        MouseButtonStates currentMouseState;
-        MouseButtonStates previousMouseState;
+        MouseStates currentState;
+        MouseStates lastState;
+        MouseState position;
         public enum GameState
         {
             Initialize,
@@ -53,10 +43,6 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             GameOver
         }
         GameState currentGameState = GameState.Initialize;
-
-        MouseState position;
-
-
         public TicTacToe()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -68,10 +54,10 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
             _graphics.PreferredBackBufferHeight = WINDOWHEIGHT;
             _graphics.ApplyChanges();
-            currentMouseState = MouseButtonStates.IsReleased;
-            previousMouseState = MouseButtonStates.IsReleased;
+            currentState = MouseStates.IsReleased;
+            lastState = MouseStates.IsReleased;
 
-            nextTokenToBePlayed = GameSpaceState.X;
+            nextMove = BoardState.X;
             for (int row = 0; row < 3; row++)
             {
                 for (int col = 0; col < 3; col++)
@@ -97,8 +83,7 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             switch (currentGameState)
             {
                 case GameState.Initialize:
-
-                    currentMouseState = MouseButtonStates.IsReleased;
+                    currentState = MouseStates.IsReleased;
                     currentGameState = GameState.WaitForPlayerMove;
                     foreach (Tile tile in GameBoard)
                     {
@@ -106,39 +91,36 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                     }
                     break;
                 case GameState.WaitForPlayerMove:
-                    if (previousMouseState == MouseButtonStates.IsPressed && currentMouseState == MouseButtonStates.IsReleased)
+                    if (lastState == MouseStates.IsPressed && currentState == MouseStates.IsReleased)
                     {
                         currentGameState = GameState.MakePlayerMove;
                     }
                     break;
                 case GameState.MakePlayerMove:
-
                     currentGameState = GameState.EvaluatePlayerMove;
                     break;
                 case GameState.EvaluatePlayerMove:
-
                     foreach (Tile tile in GameBoard)
                     {
-                        if (tile.TrySetState(position.Position, (Tile.TileStates)(int)nextTokenToBePlayed))
+                        if (tile.TrySetState(position.Position, (Tile.TileStates)(int)nextMove))
                         {
                             currentGameState = GameState.WaitForPlayerMove;
                         }
                     }
-
-                    if (nextTokenToBePlayed == GameSpaceState.X)
+                    if (nextMove == BoardState.X)
                     {
-                        nextTokenToBePlayed = GameSpaceState.O;
+                        nextMove = BoardState.O;
                     }
-                    else if (nextTokenToBePlayed == GameSpaceState.O)
+                    else if (nextMove == BoardState.O)
                     {
-                        nextTokenToBePlayed = GameSpaceState.X;
+                        nextMove = BoardState.X;
                     }
                     break;
                 case GameState.GameOver:
                     break;
             }
-            previousMouseState = currentMouseState;
-            currentMouseState = (MouseButtonStates)Mouse.GetState().LeftButton;
+            lastState = currentState;
+            currentState = (MouseStates)Mouse.GetState().LeftButton;
             base.Update(gameTime);
         }
 
@@ -173,19 +155,17 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                 case GameState.Initialize:
                     break;
                 case GameState.WaitForPlayerMove:
-                    Vector2 adjustedMousePosition = new Vector2(position.Position.X - (xTexture.Width / 2),
-                       position.Y - (xTexture.Height / 2));
-
+                    Vector2 newPosition = new Vector2(position.Position.X - (xTexture.Width / 2), position.Y - (xTexture.Height / 2));
                     Texture2D imageToDraw = xTexture;
-                    if (nextTokenToBePlayed == GameSpaceState.O)
+                    if (nextMove == BoardState.O)
                     {
                         imageToDraw = oTexture;
                     }
-                    else if (nextTokenToBePlayed == GameSpaceState.X)
+                    else if (nextMove == BoardState.X)
                     {
                         imageToDraw = xTexture;
                     }
-                    _spriteBatch.Draw(imageToDraw, adjustedMousePosition, Color.White);
+                    _spriteBatch.Draw(imageToDraw, newPosition, Color.White);
                     break;
                 case GameState.MakePlayerMove:
                     break;
@@ -194,24 +174,7 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                 case GameState.GameOver:
                     break;
             }
-
-            //for (int row = 0; row < GameBoard.GetLength(0); row++)
-            //{
-            //    for (int col = 0; col < GameBoard.GetLength(1); col++)
-            //    {
-            //        if (GameBoard[row, col] == GameSpaceState.X)
-            //        {
-            //            spriteBatch.Draw(xImage, new Vector2(col * xImage.Width, row * xImage.Height), Color.White);
-            //        }
-            //        else if (GameBoard[row, col] == GameSpaceState.O)
-            //        {
-            //            spriteBatch.Draw(oImage, new Vector2(col * oImage.Width, row * oImage.Height), Color.White);
-            //        }
-            //    }
-            //}
-
             _spriteBatch.End();
-
             base.Draw(gameTime);
         }
     }

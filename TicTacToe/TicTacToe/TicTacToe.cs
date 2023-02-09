@@ -9,18 +9,19 @@ namespace TicTacToe
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        Texture2D backgroundTexture;
+        Texture2D boardTexture;
         Texture2D xTexture;
         Texture2D oTexture;
+        Texture2D Blank;
 
-        Rectangle oRectangle, xRectangle, backgroundRectangle;
+        Rectangle oRectangle, xRectangle, boardRectangle;
 
         const int WINDOWWIDTH = 170;
         const int WINDOWHEIGHT = 170;
 
         public enum GameState
         {
-            Initialize, 
+            Initialize,
             SwapTurn,
             ExecuteTurn,
             EvaluateBoard,
@@ -42,7 +43,7 @@ namespace TicTacToe
         }
         Turn currentTurn = Turn.XTurn;
 
-        Rectangle[,] GameBoard = new Rectangle[3,3]; //set number of elements - using an array is easier 
+        Rectangle[,] GameBoard = new /*Tile*/ Rectangle[3, 3]; 
         public TicTacToe()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -50,6 +51,7 @@ namespace TicTacToe
             _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            //Blank = new Texture2D(GraphicsDevice, 50, 50);
         }
 
         protected override void Initialize()
@@ -64,7 +66,7 @@ namespace TicTacToe
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            backgroundTexture = Content.Load<Texture2D>("TicTacToeBoard");
+            boardTexture = Content.Load<Texture2D>("TicTacToeBoard");
             xTexture = Content.Load<Texture2D>("X");
             oTexture = Content.Load<Texture2D>("O");
         }
@@ -107,7 +109,7 @@ namespace TicTacToe
                     }
                     break;
                 case MouseButtonStates.IsReleased:
-                    if(Mouse.GetState().LeftButton == ButtonState.Pressed)
+                    if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                     {
                         currentMouseState = MouseButtonStates.WasPressed;
                     }
@@ -126,19 +128,13 @@ namespace TicTacToe
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            _spriteBatch.Draw(backgroundTexture, Vector2.Zero, Color.White);
-            if(currentMouseState == MouseButtonStates.IsReleased)
-            {
-                _spriteBatch.Draw(xTexture, Vector2.Zero, Color.White);
-            }
+            _spriteBatch.Draw(boardTexture, Vector2.Zero, Color.White);
             _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
 }
-//namespace
-//{
-//    public class TicTacToeGame : Game
+//public class TicTacToeGame : Game
 //{
 //    private GraphicsDeviceManager graphics;
 //    private SpriteBatch spriteBatch;
@@ -162,6 +158,26 @@ namespace TicTacToe
 
 //    GameSpaceState nextTokenToBePlayed;
 
+//    GameSpaceState[,] gameBoard =
+//        new GameSpaceState[,]
+//        {
+//                {GameSpaceState.X, GameSpaceState.O, GameSpaceState.Empty},
+//                {GameSpaceState.Empty, GameSpaceState.Empty, GameSpaceState.Empty},
+//                {GameSpaceState.Empty, GameSpaceState.Empty, GameSpaceState.X}
+
+//        };
+
+//    public enum GameState
+//    {
+//        Initialize,
+//        WaitForPlayerMove,
+//        MakePlayerMove,
+//        EvaluatePlayerMove,
+//        GameOver
+//    }
+//    GameState currentGameState = GameState.Initialize;
+
+
 //    public TicTacToeGame()
 //    {
 //        graphics = new GraphicsDeviceManager(this);
@@ -173,8 +189,6 @@ namespace TicTacToe
 //        graphics.PreferredBackBufferWidth = WindowWidth;
 //        graphics.PreferredBackBufferHeight = WindowHeight;
 //        graphics.ApplyChanges();
-
-//        nextTokenToBePlayed = GameSpaceState.X;
 
 //        base.Initialize();
 //    }
@@ -191,17 +205,56 @@ namespace TicTacToe
 //    {
 //        currentMouseState = Mouse.GetState();
 
-//        if (previousMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+//        switch (currentGameState)
 //        {
-//            //there has been a mouse click (mouse release)
-//            if (nextTokenToBePlayed == GameSpaceState.X)
-//            {
-//                nextTokenToBePlayed = GameSpaceState.O;
-//            }
-//            else if (nextTokenToBePlayed == GameSpaceState.O)
-//            {
+//            case GameState.Initialize:
 //                nextTokenToBePlayed = GameSpaceState.X;
-//            }
+//                /*
+//                 * Set all of the game board spaces to "Empty".
+//                 */
+
+//                currentGameState = GameState.WaitForPlayerMove;
+//                break;
+//            case GameState.WaitForPlayerMove:
+//                //there has been a mouse click (mouse release)
+//                if (previousMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+//                {
+//                    currentGameState = GameState.MakePlayerMove;
+//                }
+//                break;
+//            case GameState.MakePlayerMove:
+//                /*
+//                 * 1. Figure out what game space of the array was clicked on
+//                 * using currentMouseState.X and currentMouseState.Y to get the pixels of where the mouse is
+//                 * 2. If they clicked on an empty game space, set that game space of the array to the nextTokenToBePlayed.
+//                 * Then, go to EvaluatePlayerMove.
+//                 * 3. If they clicked on a full slot, go back to WaitForPlayerMove
+//                 */
+
+
+//                currentGameState = GameState.EvaluatePlayerMove;
+//                break;
+//            case GameState.EvaluatePlayerMove:
+//                /*
+//                 * 1. figure out if someone won or tied. If so, go to GameOver state.
+//                 * Otherwise, set nextTokenToBePlayed and go back to WaitForPlayerMove
+//                 */
+
+//                if (nextTokenToBePlayed == GameSpaceState.X)
+//                {
+//                    nextTokenToBePlayed = GameSpaceState.O;
+//                }
+//                else if (nextTokenToBePlayed == GameSpaceState.O)
+//                {
+//                    nextTokenToBePlayed = GameSpaceState.X;
+//                }
+//                currentGameState = GameState.WaitForPlayerMove;
+//                break;
+//            case GameState.GameOver:
+//                /*
+//                 * Display game over message. Wait for a click to restart the game. When game restarts, go to Initialize.
+//                 */
+//                break;
 //        }
 
 //        previousMouseState = currentMouseState;
@@ -212,26 +265,54 @@ namespace TicTacToe
 //    {
 //        GraphicsDevice.Clear(Color.CornflowerBlue);
 
-//        Vector2 adjustedMousePosition =
-//            new Vector2(currentMouseState.Position.X - (xImage.Width / 2),
-//                currentMouseState.Position.Y - (xImage.Height / 2));
-
-//        Texture2D imageToDraw = xImage;
-//        if (nextTokenToBePlayed == GameSpaceState.O)
-//        {
-//            imageToDraw = oImage;
-//        }
-//        else if (nextTokenToBePlayed == GameSpaceState.X)
-//        {
-//            imageToDraw = xImage;
-//        }
-
 //        spriteBatch.Begin();
+
 //        spriteBatch.Draw(backgroundImage, Vector2.Zero, Color.White);
-//        spriteBatch.Draw(imageToDraw, adjustedMousePosition, Color.White);
+
+//        switch (currentGameState)
+//        {
+//            case GameState.Initialize:
+//                break;
+//            case GameState.WaitForPlayerMove:
+//                Vector2 adjustedMousePosition = new Vector2(currentMouseState.Position.X - (xImage.Width / 2),
+//                    currentMouseState.Position.Y - (xImage.Height / 2));
+
+//                Texture2D imageToDraw = xImage;
+//                if (nextTokenToBePlayed == GameSpaceState.O)
+//                {
+//                    imageToDraw = oImage;
+//                }
+//                else if (nextTokenToBePlayed == GameSpaceState.X)
+//                {
+//                    imageToDraw = xImage;
+//                }
+//                spriteBatch.Draw(imageToDraw, adjustedMousePosition, Color.White);
+//                break;
+//            case GameState.MakePlayerMove:
+//                break;
+//            case GameState.EvaluatePlayerMove:
+//                break;
+//            case GameState.GameOver:
+//                break;
+//        }
+
+//        for (int row = 0; row < gameBoard.GetLength(0); row++)
+//        {
+//            for (int col = 0; col < gameBoard.GetLength(1); col++)
+//            {
+//                if (gameBoard[row, col] == GameSpaceState.X)
+//                {
+//                    spriteBatch.Draw(xImage, new Vector2(col * xImage.Width, row * xImage.Height), Color.White);
+//                }
+//                else if (gameBoard[row, col] == GameSpaceState.O)
+//                {
+//                    spriteBatch.Draw(oImage, new Vector2(col * oImage.Width, row * oImage.Height), Color.White);
+//                }
+//            }
+//        }
+
 //        spriteBatch.End();
 
 //        base.Draw(gameTime);
 //    }
-//}
 //}

@@ -17,6 +17,8 @@ namespace DMIT1514_Lab2_Kiana_Leslie
 
         const int WINDOWWIDTH = 170;
         const int WINDOWHEIGHT = 170;
+        const int ENDWIDTH = 800;
+        const int ENDHEIGHT = 480;
         public enum BoardState
         {
             Blank,
@@ -50,7 +52,6 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
-
         protected override void Initialize()
         {
             _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
@@ -70,16 +71,14 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             }
             base.Initialize();
         }
-
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             boardTexture = Content.Load<Texture2D>("TicTacToeBoard");
             xTexture = Content.Load<Texture2D>("X");
             oTexture = Content.Load<Texture2D>("O");
-            //font = Content.Load<SpriteFont>("FredokaOne-Regular");
+            font = Content.Load<SpriteFont>("FredokaOneRegular");
         }
-
         protected override void Update(GameTime gameTime)
         {
             position = Mouse.GetState();
@@ -126,14 +125,11 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             currentState = (MouseStates)Mouse.GetState().LeftButton;
             base.Update(gameTime);
         }
-
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
             _spriteBatch.Begin();
 
-            _spriteBatch.Draw(boardTexture, Vector2.Zero, Color.White);
+            _spriteBatch.Draw(boardTexture, Vector2.Zero, Color.Aquamarine);
             foreach (Tile tile in GameBoard)
             {
                 Texture2D texture2D = null;
@@ -177,6 +173,9 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                 case GameState.GameOver:
                     if (currentGameState == GameState.GameOver)
                     {
+                        GraphicsDevice.Clear(Color.AliceBlue);
+                        _graphics.PreferredBackBufferWidth = ENDWIDTH;
+                        _graphics.PreferredBackBufferHeight = ENDHEIGHT;
                         Vector2 textCenter = font.MeasureString("Win!") / 2f;
                         _spriteBatch.DrawString(font, "Win!", new Vector2(75, 75), Color.White, 0, textCenter, 2.0f, SpriteEffects.None, 0);
                     }

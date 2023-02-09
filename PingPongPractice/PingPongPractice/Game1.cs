@@ -9,9 +9,16 @@ namespace PingPongPractice
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        const int WINDOWWIDTH = 1050;
+        const int WINDOWHEIGHT = 650;
+
+        Texture2D oceanBgTexture;
+        Rectangle oceanRectangle; 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
+            _graphics.PreferredBackBufferHeight = WINDOWHEIGHT; 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -26,7 +33,7 @@ namespace PingPongPractice
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            oceanBgTexture = Content.Load<Texture2D>("oceanbg");
             // TODO: use this.Content to load your game content here
         }
 
@@ -42,9 +49,9 @@ namespace PingPongPractice
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(oceanBgTexture, oceanRectangle = new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

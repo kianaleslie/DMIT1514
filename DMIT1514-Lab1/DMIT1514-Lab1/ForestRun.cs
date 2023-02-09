@@ -73,6 +73,7 @@ namespace DMIT1514_Lab1
             }
             if (state.IsKeyDown(Keys.S))
             {
+                
                 personDirection.Y += 10;
             }
 

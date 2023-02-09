@@ -36,8 +36,9 @@ namespace Lesson05_Animations
                 celSourceRectangle.Height = this.celAnimationSequence.CelHeight;
             }
         }
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime/*, int row*/)
         {
+            //celSourceRectangle.Y = celSourceRectangle.Height * row;
             if (celAnimationSequence != null)
             {
                 celTimeElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;

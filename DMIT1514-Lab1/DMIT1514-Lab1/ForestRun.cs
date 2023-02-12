@@ -22,7 +22,6 @@ namespace DMIT1514_Lab1
         Vector2 personDirection = new Vector2();
 
         Texture2D bunnyTexture;
-        Vector2 bunnyDirection = new Vector2();
 
         public ForestRun()
         {
@@ -47,7 +46,7 @@ namespace DMIT1514_Lab1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             forestTexture = Content.Load<Texture2D>("forest-bg");
-            personTexture = Content.Load<Texture2D>("smallfry");
+            personTexture = Content.Load<Texture2D>("george");
             bunnyTexture = Content.Load<Texture2D>("bunny");
 
             Texture2D spriteSheet = Content.Load<Texture2D>("FoxSpriteSheet0");
@@ -74,6 +73,7 @@ namespace DMIT1514_Lab1
             }
             if (state.IsKeyDown(Keys.S))
             {
+                
                 personDirection.Y += 10;
             }
 

@@ -17,9 +17,6 @@ namespace Lesson05_Animations
         const int columnCount = 11;
         const int spriteCount = 19;
 
-        /// <summary>
-        /// Begins or continues playback of a CelAnimationSequence.
-        /// </summary>
         public void Play(CelAnimationSequence celAnimationSequence)
         {
             if (celAnimationSequence == null)
@@ -39,13 +36,9 @@ namespace Lesson05_Animations
                 celSourceRectangle.Height = this.celAnimationSequence.CelHeight;
             }
         }
-
-        /// <summary>
-        /// Update the state of the CelAnimationPlayer.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime/*, int row*/)
         {
+            //celSourceRectangle.Y = celSourceRectangle.Height * row;
             if (celAnimationSequence != null)
             {
                 celTimeElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -54,27 +47,12 @@ namespace Lesson05_Animations
                 {
                     celTimeElapsed -= celAnimationSequence.CelTime;
 
-                    // Advance the frame index looping as appropriate...
-                    //int row = 0;
-                    //int column = 0;
-                    //for (int i = 0; i < spriteCount; ++i)
-                    //{
-                    //    row = i / columnCount;
-                    //    column = i % columnCount;
-                    //}
-                    //int width = celAnimationSequence.Texture.Width / columnCount;
-                    //int height = celAnimationSequence.Texture.Height / rowCount;
-                    //Rectangle sourceRectangle = new Rectangle(column * width, row * height, width, height);
                     celIndex = (celIndex + 1) % celAnimationSequence.CelCount;
 
                     celSourceRectangle.X = celIndex * celSourceRectangle.Width;
                 }
             }
         }
-
-        /// <summary>
-        /// Draws the current cel of the animation.
-        /// </summary>
         public void Draw(SpriteBatch spriteBatch, Vector2 position, SpriteEffects spriteEffects)
         {
             if (celAnimationSequence != null)

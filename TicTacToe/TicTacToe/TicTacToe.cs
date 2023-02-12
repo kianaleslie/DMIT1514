@@ -80,6 +80,14 @@ namespace TicTacToe
             switch (currrentGameState)
             {
                 case GameState.Initialize:
+                    currentMouseState = MouseButtonStates.IsReleased;
+                    for(int currentRow = 0; currentRow < 3; currentRow++)
+                    {
+                        for(int currentCol = 0; currentCol < 3; currentCol++)
+                        {
+                            GameBoard[currentCol, currentRow] = new Rectangle(new ((currentCol * 50) + (currentCol * 10), currentRow * 50), new (50,50));
+                        }
+                    }
                     break;
                 case GameState.SwapTurn:
                     break;

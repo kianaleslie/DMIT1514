@@ -9,32 +9,32 @@ using Microsoft.Xna.Framework.Input;
 
 namespace DMIT1514_Lab2_Kiana_Leslie
 {
-    public class Tile
+    public class Square
     {
-        public enum TileStates
+        public enum SquareStates
         {
             Blank,
             X,
             O
         }
         public Rectangle Rectangle { get; private set; }
-        public TileStates TileState { get; private set; }
-        public Tile(Rectangle rectangle)
+        public SquareStates CurrentSquareState { get; private set; }
+        public Square(Rectangle rectangle)
         {
             Rectangle = rectangle;
-            TileState = TileStates.Blank;
+            CurrentSquareState = SquareStates.Blank;
         }
         public void Reset()
         {
-            TileState = TileStates.Blank;
+            CurrentSquareState = SquareStates.Blank;
         }
-        public void SetState(TileStates state)
+        public void SetState(SquareStates state)
         {
-            TileState = state;
+            CurrentSquareState = state;
         }
-        public bool TrySetState(Point point, TileStates state)
+        public bool TrySetState(Point point, SquareStates state)
         {
-            if (TileState == TileStates.Blank && Rectangle.Contains(point))
+            if (CurrentSquareState == SquareStates.Blank && Rectangle.Contains(point))
             {
                 SetState(state);
                 return true;

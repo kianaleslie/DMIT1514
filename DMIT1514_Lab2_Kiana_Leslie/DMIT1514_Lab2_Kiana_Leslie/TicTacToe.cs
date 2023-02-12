@@ -9,42 +9,22 @@ namespace DMIT1514_Lab2_Kiana_Leslie
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        const int WINDOWWIDTH = 170;
+        const int WINDOWHEIGHT = 170;
+
         Texture2D boardTexture;
         Texture2D xTexture;
         Texture2D oTexture;
 
         SpriteFont font;
+        Square[,] GameBoard = new Square[3, 3];
 
-        const int WINDOWWIDTH = 170;
-        const int WINDOWHEIGHT = 170;
-        public enum BoardState
-        {
-            Blank,
-            X,
-            O
-        }
-        BoardState nextMove;
+        public BoardState nextMove;
+        public MouseStates currentState;
+        public MouseStates lastState;
+        public MouseState location;
+        public GameState currentGameState = GameState.Initialize;
 
-        Tile[,] GameBoard = new Tile[3, 3];
-        public enum MouseStates
-        {
-            IsPressed,
-            IsReleased,
-            WasPressed,
-            WasReleased
-        }
-        MouseStates currentState;
-        MouseStates lastState;
-        MouseState position;
-        public enum GameState
-        {
-            Initialize,
-            WaitForPlayerMove,
-            MakePlayerMove,
-            EvaluatePlayerMove,
-            GameOver
-        }
-        GameState currentGameState = GameState.Initialize;
         public TicTacToe()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -53,19 +33,24 @@ namespace DMIT1514_Lab2_Kiana_Leslie
 
         protected override void Initialize()
         {
+            //window fits game board
             _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
             _graphics.PreferredBackBufferHeight = WINDOWHEIGHT;
+
             _graphics.ApplyChanges();
+
+            //keep track of mouse state 
             currentState = MouseStates.IsReleased;
             lastState = MouseStates.IsReleased;
 
+            //intialize the board
             nextMove = BoardState.X;
             for (int row = 0; row < 3; row++)
             {
                 for (int col = 0; col < 3; col++)
                 {
                     GameBoard[col, row] =
-                    new Tile(new Rectangle(new Point((col * 50) + (col * 4), (row * 50) + (row * 4)), new(50, 50)));
+                    new Square(new Rectangle(new Point((col * 50) + (col * 4), (row * 50) + (row * 4)), new(50, 50)));
                 }
             }
             base.Initialize();
@@ -77,37 +62,37 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             boardTexture = Content.Load<Texture2D>("TicTacToeBoard");
             xTexture = Content.Load<Texture2D>("X");
             oTexture = Content.Load<Texture2D>("O");
-            //font = Content.Load<SpriteFont>("FredokaOne-Regular");
+            font = Content.Load<SpriteFont>("FredokaOne-Regular");
         }
 
         protected override void Update(GameTime gameTime)
         {
-            position = Mouse.GetState();
+            location = Mouse.GetState();
             switch (currentGameState)
             {
                 case GameState.Initialize:
                     currentState = MouseStates.IsReleased;
-                    currentGameState = GameState.WaitForPlayerMove;
-                    foreach (Tile tile in GameBoard)
+                    currentGameState = GameState.WaitForMove;
+                    foreach (Square tile in GameBoard)
                     {
                         tile.Reset();
                     }
                     break;
-                case GameState.WaitForPlayerMove:
+                case GameState.WaitForMove:
                     if (lastState == MouseStates.IsPressed && currentState == MouseStates.IsReleased)
                     {
-                        currentGameState = GameState.MakePlayerMove;
+                        currentGameState = GameState.MakeMove;
                     }
                     break;
-                case GameState.MakePlayerMove:
-                    currentGameState = GameState.EvaluatePlayerMove;
+                case GameState.MakeMove:
+                    currentGameState = GameState.EvaluateMove;
                     break;
-                case GameState.EvaluatePlayerMove:
-                    foreach (Tile tile in GameBoard)
+                case GameState.EvaluateMove:
+                    foreach (Square tile in GameBoard)
                     {
-                        if (tile.TrySetState(position.Position, (Tile.TileStates)(int)nextMove))
+                        if (tile.TrySetState(location.Position, (Square.SquareStates)(int)nextMove))
                         {
-                            currentGameState = GameState.WaitForPlayerMove;
+                            currentGameState = GameState.WaitForMove;
                         }
                     }
                     if (nextMove == BoardState.X)
@@ -132,18 +117,17 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin();
-
             _spriteBatch.Draw(boardTexture, Vector2.Zero, Color.White);
-            foreach (Tile tile in GameBoard)
+            foreach (Square tile in GameBoard)
             {
                 Texture2D texture2D = null;
-                if (tile.TileState == Tile.TileStates.X)
+                if (tile.CurrentSquareState == Square.SquareStates.X)
                 {
                     texture2D = xTexture;
                 }
                 else
                 {
-                    if (tile.TileState == Tile.TileStates.O)
+                    if (tile.CurrentSquareState == Square.SquareStates.O)
                     {
                         texture2D = oTexture;
                     }
@@ -157,8 +141,8 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             {
                 case GameState.Initialize:
                     break;
-                case GameState.WaitForPlayerMove:
-                    Vector2 newPosition = new Vector2(position.Position.X - (xTexture.Width / 2), position.Y - (xTexture.Height / 2));
+                case GameState.WaitForMove:
+                    Vector2 newPosition = new Vector2(location.Position.X - (xTexture.Width / 2), location.Y - (xTexture.Height / 2));
                     Texture2D imageToDraw = xTexture;
                     if (nextMove == BoardState.O)
                     {
@@ -170,15 +154,15 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                     }
                     _spriteBatch.Draw(imageToDraw, newPosition, Color.White);
                     break;
-                case GameState.MakePlayerMove:
+                case GameState.MakeMove:
                     break;
-                case GameState.EvaluatePlayerMove:
+                case GameState.EvaluateMove:
                     break;
                 case GameState.GameOver:
                     if (currentGameState == GameState.GameOver)
                     {
-                        Vector2 textCenter = font.MeasureString("Win!") / 2f;
-                        _spriteBatch.DrawString(font, "Win!", new Vector2(75, 75), Color.White, 0, textCenter, 2.0f, SpriteEffects.None, 0);
+                        //Vector2 textCenter = font.MeasureString("Win!") / 2f;
+                        //_spriteBatch.DrawString(font, "Win!", new Vector2(75, 75), Color.White, 0, textCenter, 2.0f, SpriteEffects.None, 0);
                     }
                     break;
             }

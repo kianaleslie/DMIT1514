@@ -12,6 +12,7 @@ namespace DMIT1514_Lab2_Kiana_Leslie
         TakeTurn,
         MakeMove,
         EvaluateMove,
+        EvaluateBoard,
         GameOver
     }
 }

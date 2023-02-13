@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Diagnostics;
 
 namespace DMIT1514_Lab2_Kiana_Leslie
 {
@@ -25,6 +26,7 @@ namespace DMIT1514_Lab2_Kiana_Leslie
         public MouseStates lastState;
         public MouseState location;
         public GameState currentGameState = GameState.Initialize;
+        public bool isTie = false;
 
         public TicTacToe()
         {
@@ -88,7 +90,7 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                     {
                         if (tile.TrySetState(location.Position, (Square.SquareStates)(int)nextMove))
                         {
-                            currentGameState = GameState.TakeTurn;
+                            currentGameState = GameState.EvaluateBoard;
                         }
                     }
                     if (nextMove == BoardState.X)
@@ -100,7 +102,31 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                         nextMove = BoardState.X;
                     }
                     break;
+                case GameState.EvaluateBoard:
+                    CheckWinOrTie checkWin = new CheckWinOrTie();
+                    CheckWinOrTie checkTie = new CheckWinOrTie();
+                    if (checkWin.HasWon((Square.SquareStates)(int)nextMove + 1, GameBoard))
+                    {
+                        currentGameState = GameState.GameOver;
+                    }
+                    else
+                    {
+                        if (checkTie.IsATie(GameBoard))
+                        {
+                            isTie = true;
+                            currentGameState = GameState.GameOver;
+                        }
+                        else
+                        {
+                            currentGameState = GameState.TakeTurn;
+                        }
+                    }
+                    break;
                 case GameState.GameOver:
+                    if (lastState == MouseStates.IsPressed && currentState == MouseStates.IsReleased)
+                    {
+                        currentGameState = GameState.Initialize;
+                    }
                     break;
             }
             lastState = currentState;
@@ -110,28 +136,29 @@ namespace DMIT1514_Lab2_Kiana_Leslie
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
             _spriteBatch.Begin();
 
-            _spriteBatch.Draw(boardTexture, Vector2.Zero, Color.White);
-            foreach (Square tile in GameBoard)
+            if (currentGameState != GameState.GameOver)
             {
-                Texture2D texture2D = null;
-                if (tile.CurrentSquareState == Square.SquareStates.X)
+                _spriteBatch.Draw(boardTexture, Vector2.Zero, Color.White);
+                foreach (Square tile in GameBoard)
                 {
-                    texture2D = xTexture;
-                }
-                else
-                {
-                    if (tile.CurrentSquareState == Square.SquareStates.O)
+                    Texture2D texture2D = null;
+                    if (tile.CurrentSquareState == Square.SquareStates.X)
                     {
-                        texture2D = oTexture;
+                        texture2D = xTexture;
                     }
-                }
-                if (texture2D != null)
-                {
-                    _spriteBatch.Draw(texture2D, tile.Rectangle, Color.White);
+                    else
+                    {
+                        if (tile.CurrentSquareState == Square.SquareStates.O)
+                        {
+                            texture2D = oTexture;
+                        }
+                    }
+                    if (texture2D != null)
+                    {
+                        _spriteBatch.Draw(texture2D, tile.Rectangle, Color.White);
+                    }
                 }
             }
             switch (currentGameState)
@@ -156,11 +183,26 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                 case GameState.EvaluateMove:
                     break;
                 case GameState.GameOver:
-                    if (currentGameState == GameState.GameOver)
+                    GraphicsDevice.Clear(Color.Turquoise);
+                    if (isTie)
                     {
-                        //Vector2 textCenter = font.MeasureString("Win!") / 2f;
-                        //_spriteBatch.DrawString(font, "Win!", new Vector2(75, 75), Color.White, 0, textCenter, 2.0f, SpriteEffects.None, 0);
+                        Vector2 textCenter = font.MeasureString("It's a tie!") / 2f;
+                        _spriteBatch.DrawString(font, "It's a tie!", new Vector2(80, 50), Color.MidnightBlue, 0, textCenter, 2.0f, SpriteEffects.None, 0);
                     }
+                    else
+                    if ((Square.SquareStates)(int)nextMove + 1 == Square.SquareStates.O)
+                    {
+                        Vector2 textCenter = font.MeasureString("O wins!") / 2f;
+                        _spriteBatch.DrawString(font, "O wins!", new Vector2(80, 50), Color.MidnightBlue, 0, textCenter, 2.0f, SpriteEffects.None, 0);
+                    }
+                    else
+                    if ((Square.SquareStates)(int)nextMove + 1 == Square.SquareStates.X)
+                    {
+                        Vector2 textCenter = font.MeasureString("X wins!") / 2f;
+                        _spriteBatch.DrawString(font, "X wins!", new Vector2(80, 50), Color.MidnightBlue, 0, textCenter, 2.0f, SpriteEffects.None, 0);
+                    }
+                    Vector2 playAgain = font.MeasureString("Click to \nplay again!") / 2f;
+                    _spriteBatch.DrawString(font, "Click to \nplay again!", new Vector2(85, 120), Color.White, 0, playAgain, 2.0f, SpriteEffects.None, 0);
                     break;
             }
             _spriteBatch.End();

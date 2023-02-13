@@ -8,22 +8,20 @@ namespace DMIT1514_Lab2_Kiana_Leslie
 {
     public class CheckWinOrTie
     {
-        public BoardState xWin;
-        public BoardState oWin;
-        public BoardState empty;
-
-        public Square[,] Board = new Square[3, 3];
-
-        public bool HasWon(Square symbol)
+        public bool HasWon(Square.SquareStates symbol, Square[,] Board)
         {
-            return IsHorizontalVictory(symbol) || IsVerticalVictory(symbol) || IsDiagonalVictory(symbol);
+            return IsHorizontalVictory(symbol, Board) || IsVerticalVictory(symbol, Board) || IsDiagonalVictory(symbol, Board);
+        }
+        public bool IsATie(Square[,] Board)
+        {
+            return IsTie(Board);
         }
 
-        private bool IsHorizontalVictory(Square symbol)
+        private bool IsHorizontalVictory(Square.SquareStates symbol, Square[,] Board)
         {
             for (int y = 0; y <= 2; y++)
             {
-                if (Board[0, y] == symbol && Board[1, y] == symbol && Board[2, y] == symbol)
+                if (Board[0, y].CurrentSquareState == symbol && Board[1, y].CurrentSquareState == symbol && Board[2, y].CurrentSquareState == symbol)
                 {
                     return true;
                 }
@@ -31,11 +29,11 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             return false;
         }
 
-        private bool IsVerticalVictory(Square symbol)
+        private bool IsVerticalVictory(Square.SquareStates symbol, Square[,] Board)
         {
             for (int x = 0; x <= 2; x++)
             {
-                if (Board[x, 0] == symbol && Board[x, 1] == symbol && Board[x, 2] == symbol)
+                if (Board[x, 0].CurrentSquareState == symbol && Board[x, 1].CurrentSquareState == symbol && Board[x, 2].CurrentSquareState == symbol)
                 {
                     return true;
                 }
@@ -43,17 +41,31 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             return false;
         }
 
-        private bool IsDiagonalVictory(Square symbol)
+        private bool IsDiagonalVictory(Square.SquareStates symbol, Square[,] Board)
         {
-            if (Board[0, 0] == symbol && Board[1, 1] == symbol && Board[2, 2] == symbol)
+            if (Board[0, 0].CurrentSquareState == symbol && Board[1, 1].CurrentSquareState == symbol && Board[2, 2].CurrentSquareState == symbol)
             {
                 return true;
             }
-            if (Board[0, 2] == symbol && Board[1, 1] == symbol && Board[2, 0] == symbol)
+            if (Board[0, 2].CurrentSquareState == symbol && Board[1, 1].CurrentSquareState == symbol && Board[2, 0].CurrentSquareState == symbol)
             {
                 return true;
             }
             return false;
+        }
+        private bool IsTie(Square[,] Board)
+        {
+            for (int y = 0; y < 3; y++)
+            {
+                for (int x = 0; x < 3; x++)
+                {
+                    if (Board[y,x].CurrentSquareState == Square.SquareStates.Blank)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }

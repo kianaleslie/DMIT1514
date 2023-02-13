@@ -17,8 +17,8 @@ namespace DMIT1514_Lab2_Kiana_Leslie
         Texture2D oTexture;
 
         SpriteFont font;
-        Square[,] GameBoard = new Square[3, 3];
 
+        Square[,] GameBoard = new Square[3, 3];
         public BoardState nextMove;
         public MouseStates currentState;
         public MouseStates lastState;
@@ -72,13 +72,13 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             {
                 case GameState.Initialize:
                     currentState = MouseStates.IsReleased;
-                    currentGameState = GameState.WaitForMove;
+                    currentGameState = GameState.TakeTurn;
                     foreach (Square tile in GameBoard)
                     {
                         tile.Reset();
                     }
                     break;
-                case GameState.WaitForMove:
+                case GameState.TakeTurn:
                     if (lastState == MouseStates.IsPressed && currentState == MouseStates.IsReleased)
                     {
                         currentGameState = GameState.MakeMove;
@@ -92,7 +92,7 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                     {
                         if (tile.TrySetState(location.Position, (Square.SquareStates)(int)nextMove))
                         {
-                            currentGameState = GameState.WaitForMove;
+                            currentGameState = GameState.TakeTurn;
                         }
                     }
                     if (nextMove == BoardState.X)
@@ -103,6 +103,7 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                     {
                         nextMove = BoardState.X;
                     }
+                    CheckWinOrTie.HasWon();
                     break;
                 case GameState.GameOver:
                     break;
@@ -142,7 +143,7 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             {
                 case GameState.Initialize:
                     break;
-                case GameState.WaitForMove:
+                case GameState.TakeTurn:
                     Vector2 newPosition = new Vector2(location.Position.X - (xTexture.Width / 2), location.Y - (xTexture.Height / 2));
                     Texture2D imageToDraw = xTexture;
                     if (nextMove == BoardState.O)

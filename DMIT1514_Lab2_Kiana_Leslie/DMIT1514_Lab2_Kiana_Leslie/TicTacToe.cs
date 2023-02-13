@@ -20,6 +20,7 @@ namespace DMIT1514_Lab2_Kiana_Leslie
 
         Square[,] GameBoard = new Square[3, 3];
         public BoardState nextMove;
+        public Square symbol;
         public MouseStates currentState;
         public MouseStates lastState;
         public MouseState location;
@@ -33,17 +34,12 @@ namespace DMIT1514_Lab2_Kiana_Leslie
 
         protected override void Initialize()
         {
-            //window fits game board
             _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
             _graphics.PreferredBackBufferHeight = WINDOWHEIGHT;
-
             _graphics.ApplyChanges();
-
-            //keep track of mouse state 
             currentState = MouseStates.IsReleased;
             lastState = MouseStates.IsReleased;
 
-            //intialize the board
             nextMove = BoardState.X;
             for (int row = 0; row < 3; row++)
             {
@@ -103,7 +99,6 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                     {
                         nextMove = BoardState.X;
                     }
-                    CheckWinOrTie.HasWon();
                     break;
                 case GameState.GameOver:
                     break;

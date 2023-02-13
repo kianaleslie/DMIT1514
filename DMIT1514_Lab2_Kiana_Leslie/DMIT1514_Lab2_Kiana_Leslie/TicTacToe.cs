@@ -19,31 +19,18 @@ namespace DMIT1514_Lab2_Kiana_Leslie
         SpriteFont font;
         Square[,] GameBoard = new Square[3, 3];
 
-<<<<<<< HEAD
         public BoardState nextMove;
         public MouseStates currentState;
         public MouseStates lastState;
         public MouseState location;
         public GameState currentGameState = GameState.Initialize;
-=======
-        const int WINDOWWIDTH = 170;
-        const int WINDOWHEIGHT = 170;
-        const int ENDWIDTH = 800;
-        const int ENDHEIGHT = 480;
-        public enum BoardState
-        {
-            Blank,
-            X,
-            O
-        }
-        BoardState nextMove;
->>>>>>> 59958a58dcdbb220c607f39d69ae36adfc9b9589
 
         public TicTacToe()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
+
         protected override void Initialize()
         {
             //window fits game board
@@ -68,18 +55,16 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             }
             base.Initialize();
         }
+
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             boardTexture = Content.Load<Texture2D>("TicTacToeBoard");
             xTexture = Content.Load<Texture2D>("X");
             oTexture = Content.Load<Texture2D>("O");
-<<<<<<< HEAD
             font = Content.Load<SpriteFont>("FredokaOne-Regular");
-=======
-            font = Content.Load<SpriteFont>("FredokaOneRegular");
->>>>>>> 59958a58dcdbb220c607f39d69ae36adfc9b9589
         }
+
         protected override void Update(GameTime gameTime)
         {
             location = Mouse.GetState();
@@ -126,17 +111,15 @@ namespace DMIT1514_Lab2_Kiana_Leslie
             currentState = (MouseStates)Mouse.GetState().LeftButton;
             base.Update(gameTime);
         }
+
         protected override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
             _spriteBatch.Begin();
-<<<<<<< HEAD
+
             _spriteBatch.Draw(boardTexture, Vector2.Zero, Color.White);
             foreach (Square tile in GameBoard)
-=======
-
-            _spriteBatch.Draw(boardTexture, Vector2.Zero, Color.Aquamarine);
-            foreach (Tile tile in GameBoard)
->>>>>>> 59958a58dcdbb220c607f39d69ae36adfc9b9589
             {
                 Texture2D texture2D = null;
                 if (tile.CurrentSquareState == Square.SquareStates.X)
@@ -179,16 +162,8 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                 case GameState.GameOver:
                     if (currentGameState == GameState.GameOver)
                     {
-<<<<<<< HEAD
                         //Vector2 textCenter = font.MeasureString("Win!") / 2f;
                         //_spriteBatch.DrawString(font, "Win!", new Vector2(75, 75), Color.White, 0, textCenter, 2.0f, SpriteEffects.None, 0);
-=======
-                        GraphicsDevice.Clear(Color.AliceBlue);
-                        _graphics.PreferredBackBufferWidth = ENDWIDTH;
-                        _graphics.PreferredBackBufferHeight = ENDHEIGHT;
-                        Vector2 textCenter = font.MeasureString("Win!") / 2f;
-                        _spriteBatch.DrawString(font, "Win!", new Vector2(75, 75), Color.White, 0, textCenter, 2.0f, SpriteEffects.None, 0);
->>>>>>> 59958a58dcdbb220c607f39d69ae36adfc9b9589
                     }
                     break;
             }

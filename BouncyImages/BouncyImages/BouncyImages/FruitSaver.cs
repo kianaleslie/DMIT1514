@@ -82,19 +82,8 @@ namespace BouncyImages
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-            //if (cherriesRectangle.Bottom > _graphics.PreferredBackBufferHeight || cherriesRectangle.Top < 0)
+            //if (Keyboard.GetState().IsKeyDown(Keys.Up))
             //{
-            //    cherriesDirection.Y *= -1;
-            //}
-            //if (cherriesRectangle.Left < 0 || cherriesRectangle.Right > _graphics.PreferredBackBufferWidth)
-            //{
-            //    cherriesDirection.X *= -1;
-            //}
-            //cherriesRectangle.Offset(cherriesDirection);
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
                 if (cherriesRectangle.Bottom > _graphics.PreferredBackBufferHeight || cherriesRectangle.Top < 0)
                 {
                     cherriesDirection.Y *= -1;
@@ -104,7 +93,7 @@ namespace BouncyImages
                     cherriesDirection.X *= -1;
                 }
                 cherriesRectangle.Offset(cherriesDirection);
-            }
+            //}
 
             if (pineappleRectangle.Bottom > _graphics.PreferredBackBufferHeight || pineappleRectangle.Top < 0)
             {

@@ -1,3 +1,3 @@
 ﻿
-using var game = new PingPongPractice.Game1();
+using var game = new PingPongPractice.PingPong();
 game.Run();

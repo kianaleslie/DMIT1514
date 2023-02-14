@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PingPongPractice
 {
-    public class Game1 : Game
+    public class PingPong : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -26,7 +26,7 @@ namespace PingPongPractice
         Texture2D blowfishTexture;
         Rectangle blowfishRectangle = new Rectangle();
         Vector2 blowfishDirection = new Vector2();
-        public Game1()
+        public PingPong()
         {
             _graphics = new GraphicsDeviceManager(this);
             _graphics.PreferredBackBufferWidth = WINDOWWIDTH;

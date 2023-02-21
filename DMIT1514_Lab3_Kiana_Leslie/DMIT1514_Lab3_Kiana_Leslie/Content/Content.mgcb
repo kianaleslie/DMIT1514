@@ -61,3 +61,10 @@
 /processorParam:TextureFormat=Color
 /build:seahorse-right.png
 
+#begin Sriracha.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Sriracha.spritefont
+

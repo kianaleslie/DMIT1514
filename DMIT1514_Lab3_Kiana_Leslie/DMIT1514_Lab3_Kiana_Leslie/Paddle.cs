@@ -73,8 +73,8 @@ namespace DMIT1514_Lab3_Kiana_Leslie
                 position.Y = screenHeight - texture.Height;
             }
         }
-
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime, Color color)
+                                                 
+        public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, position, Color.White);
         }

@@ -18,10 +18,11 @@ namespace DMIT1514_Lab3_Kiana_Leslie
         public Vector2 velocity;
         public int screenWidth = 1050;
         public int screenHeight = 650;
-        public float speed = 200;
-        public float maxSpeed = 500;
-        public float minSpeed = 100;
-        public float sS = 50; 
+        //TRIED SPEED INCREASE AND DECREASE W KEYBOARD INPU
+        //public float speed = 200;
+        //public float maxSpeed = 500;
+        //public float minSpeed = 100;
+        //public float sS = 50; 
         public static Random random = new Random();
 
         public Ball(Texture2D ballTexture, Vector2 ballPosition, Vector2 ballVelocity, int screenW, int screenH)
@@ -48,23 +49,24 @@ namespace DMIT1514_Lab3_Kiana_Leslie
             {
                 velocity.Y = -velocity.Y;
             }
+            //TRIED SPEED INCREASE AND DECREASE W KEYBOARD INPUT
             //check for speed changes 
-            if (Keyboard.GetState().IsKeyDown(Keys.O))
-            {
-                speed += sS;
-                if (speed > maxSpeed)
-                {
-                    speed = maxSpeed;
-                }
-            }
-            else if (Keyboard.GetState().IsKeyDown(Keys.P))
-            {
-                speed -= sS;
-                if (speed < minSpeed)
-                {
-                    speed = minSpeed;
-                }
-            }
+            //if (Keyboard.GetState().IsKeyDown(Keys.O))
+            //{
+            //    speed += sS;
+            //    if (speed > maxSpeed)
+            //    {
+            //        speed = maxSpeed;
+            //    }
+            //}
+            //else if (Keyboard.GetState().IsKeyDown(Keys.P))
+            //{
+            //    speed -= sS;
+            //    if (speed < minSpeed)
+            //    {
+            //        speed = minSpeed;
+            //    }
+            //}
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -84,14 +86,6 @@ namespace DMIT1514_Lab3_Kiana_Leslie
             {
                 velocity.Y *= -1;
             }      
-        }
-        public void SpeedUp()
-        {
-            velocity = new Vector2(8f, 8f);
-        }
-        public void SlowDown()
-        {
-            velocity = new Vector2(2f, 2f);
         }
     }
 }

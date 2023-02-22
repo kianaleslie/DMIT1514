@@ -17,6 +17,7 @@ namespace DMIT1514_Lab3_Kiana_Leslie
         public const int WINDOWWIDTH = 1050;
         public const int WINDOWHEIGHT = 650;
         public float timer = 0f;
+        //TRIED COLOUR CHANGE
         //public bool colourChange;
         //public bool paddleHit;
 
@@ -83,14 +84,15 @@ namespace DMIT1514_Lab3_Kiana_Leslie
                     {
                         currentGameState = GameState.Serving;
                     }
-                    if(Keyboard.GetState().IsKeyDown(Keys.O))
-                    {
-                        ball.SpeedUp();
-                    }
-                    if(Keyboard.GetState().IsKeyDown(Keys.P))
-                    {
-                        ball.SlowDown();
-                    }
+                    //TRIED SPEED INCREASE AND DECREASE W KEYBOARD INPUT
+                    //if(Keyboard.GetState().IsKeyDown(Keys.O))
+                    //{
+                    //    ball.SpeedUp();
+                    //}
+                    //if(Keyboard.GetState().IsKeyDown(Keys.P))
+                    //{
+                    //    ball.SlowDown();
+                    //}
                     break;
 
                 case GameState.Serving:
@@ -126,6 +128,7 @@ namespace DMIT1514_Lab3_Kiana_Leslie
                         ball2.Reset();
                         //currentGameState = GameState.GameOver;
                     }
+                    //TRIED COLOUR CHANGE
                     //colourChange = leftPaddle.BoundingBox().Intersects(ball.BoundingBox());
                     //colourChange = rightPaddle.BoundingBox().Intersects(ball.BoundingBox());
                     //if (colourChange == true)
@@ -182,8 +185,8 @@ namespace DMIT1514_Lab3_Kiana_Leslie
             if (currentGameState == GameState.Initialize)
             {
                 _spriteBatch.Draw(oceanBgTexture, oceanRectangle = new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
-                leftPaddle.Draw(_spriteBatch, gameTime, Color.White);
-                rightPaddle.Draw(_spriteBatch, gameTime, Color.White);
+                leftPaddle.Draw(_spriteBatch);
+                rightPaddle.Draw(_spriteBatch);
                 ball.Draw(_spriteBatch);
                 ball2.Draw(_spriteBatch);
 
@@ -193,8 +196,8 @@ namespace DMIT1514_Lab3_Kiana_Leslie
             if (currentGameState == GameState.Serving)
             {
                 _spriteBatch.Draw(oceanBgTexture, oceanRectangle = new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
-                leftPaddle.Draw(_spriteBatch, gameTime, Color.White);
-                rightPaddle.Draw(_spriteBatch, gameTime, Color.White);
+                leftPaddle.Draw(_spriteBatch);
+                rightPaddle.Draw(_spriteBatch);
                 ball.Draw(_spriteBatch);
                 ball2.Draw(_spriteBatch);
 
@@ -204,12 +207,13 @@ namespace DMIT1514_Lab3_Kiana_Leslie
             if (currentGameState == GameState.Playing)
             {
                 _spriteBatch.Draw(oceanBgTexture, oceanRectangle = new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
-                leftPaddle.Draw(_spriteBatch, gameTime, Color.White);
-                rightPaddle.Draw(_spriteBatch, gameTime, Color.White);
+                leftPaddle.Draw(_spriteBatch);
+                rightPaddle.Draw(_spriteBatch);
                 ball.Draw(_spriteBatch);
                 ball2.Draw(_spriteBatch);
 
                 score.Draw(_spriteBatch);
+                //TRIED COLOUR CHANGE
                 //if (paddleHit)
                 //{
                 //    leftPaddle.Draw(_spriteBatch, gameTime, Color.Black);
@@ -261,20 +265,20 @@ namespace DMIT1514_Lab3_Kiana_Leslie
 
             if (ballRect2.Intersects(paddle1Rect))
             {
-                //Once the ball collides with the left paddle reverse and increase speed
                 ball2.velocity.X = -ball2.velocity.X;
                 ball2.velocity.X *= 1.1f;
-               // score.Player1Score();
+                //SECOND BALL SCORE
+               //score.Player1Score();
 
                 ball2.velocity.Y = (float)random.NextDouble() * 8f - 4f;
             }
             //Check collision with paddle 2
             if (ballRect2.Intersects(paddle2Rect))
             {
-                //Once the ball collides with the right paddle reverse and increase speed
                 ball2.velocity.X = -ball2.velocity.X;
                 ball2.velocity.X *= 1.1f;
-               // score.Player2Score();
+                //SECOND BALL SCORE
+               //score.Player2Score();
 
                 ball2.velocity.Y = (float)random.NextDouble() * 8f - 4f;
             }

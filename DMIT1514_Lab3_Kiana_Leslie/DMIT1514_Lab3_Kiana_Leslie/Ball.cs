@@ -16,11 +16,12 @@ namespace DMIT1514_Lab3_Kiana_Leslie
         public Texture2D texture;
         public Vector2 position;
         public Vector2 velocity;
-        public int screenWidth;
-        public int screenHeight;
-        public int speed;
-        public int paddle1Hits;
-        public int paddle2Hits;
+        public int screenWidth = 1050;
+        public int screenHeight = 650;
+        public float speed = 200;
+        public float maxSpeed = 500;
+        public float minSpeed = 100;
+        public float sS = 50; 
         public static Random random = new Random();
 
         public Ball(Texture2D ballTexture, Vector2 ballPosition, Vector2 ballVelocity, int screenW, int screenH)
@@ -47,6 +48,23 @@ namespace DMIT1514_Lab3_Kiana_Leslie
             {
                 velocity.Y = -velocity.Y;
             }
+            //check for speed changes 
+            if (Keyboard.GetState().IsKeyDown(Keys.O))
+            {
+                speed += sS;
+                if (speed > maxSpeed)
+                {
+                    speed = maxSpeed;
+                }
+            }
+            else if (Keyboard.GetState().IsKeyDown(Keys.P))
+            {
+                speed -= sS;
+                if (speed < minSpeed)
+                {
+                    speed = minSpeed;
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -55,27 +73,25 @@ namespace DMIT1514_Lab3_Kiana_Leslie
         }
         public void Reset()
         {
-            // Reset position to center of screen
+            //Reset position to center of screen
             position = new Vector2(PingPong.WINDOWWIDTH / 2 - texture.Width / 2, PingPong.WINDOWHEIGHT / 2 - texture.Height / 2);
-
-            // Choose random direction
-            float angle = MathHelper.ToRadians(random.Next(45, 135));
-            velocity = new Vector2(speed * (float)Math.Cos(angle), speed * (float)Math.Sin(angle));
-            if (random.NextDouble() > 0.5)
+            velocity = new Vector2(random.Next(2, 5), random.Next(2, 5));
+            if (random.Next(0, 2) == 0)
             {
                 velocity.X *= -1;
             }
+            if (random.Next(0, 2) == 0)
+            {
+                velocity.Y *= -1;
+            }      
         }
-        public void BallCollidesWithPaddle1()
+        public void SpeedUp()
         {
-            velocity.X = -velocity.X;
-            paddle1Hits++;
+            velocity = new Vector2(8f, 8f);
         }
-
-        public void BallCollidesWithPaddle2()
+        public void SlowDown()
         {
-            velocity.X = -velocity.X;
-            paddle2Hits++;
+            velocity = new Vector2(2f, 2f);
         }
     }
 }

@@ -74,7 +74,7 @@ namespace DMIT1514_Lab3_Kiana_Leslie
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime, Color color)
         {
             spriteBatch.Draw(texture, position, Color.White);
         }

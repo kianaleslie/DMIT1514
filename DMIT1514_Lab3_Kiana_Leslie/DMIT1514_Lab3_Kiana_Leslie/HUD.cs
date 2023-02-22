@@ -15,6 +15,7 @@ namespace DMIT1514_Lab3_Kiana_Leslie
         private int screenHeight;
         private int player1Score;
         private int player2Score;
+        private int highScore;
 
         public HUD(SpriteFont font, int screenHeight)
         {
@@ -23,22 +24,26 @@ namespace DMIT1514_Lab3_Kiana_Leslie
             this.player1Score = 0;
             this.player2Score = 0;
         }
-
         public void Draw(SpriteBatch spriteBatch)
         {
             string scoreText = string.Format("{0} - {1}", player1Score, player2Score);
-            Vector2 position = new Vector2((PingPong.WINDOWWIDTH - font.MeasureString(scoreText).X) / 2, 10);
-            spriteBatch.DrawString(font, scoreText, position, Color.White);
+            string highScoreText = string.Format("High Score: {0}", highScore);
+            Vector2 scorePosition = new Vector2((PingPong.WINDOWWIDTH - font.MeasureString(scoreText).X) / 2, 10);
+            Vector2 highScorePosition = new Vector2((PingPong.WINDOWWIDTH - font.MeasureString(highScoreText).X) / 2, 30);
+            spriteBatch.DrawString(font, scoreText, scorePosition, Color.Black);
+            spriteBatch.DrawString(font, highScoreText, highScorePosition, Color.Black);
         }
-
         public void Player1Score()
         {
             player1Score++;
         }
-
         public void Player2Score()
         {
             player2Score++;
+        }
+        public void HighScore()
+        {
+            highScore = player1Score + player2Score;
         }
     }
 }

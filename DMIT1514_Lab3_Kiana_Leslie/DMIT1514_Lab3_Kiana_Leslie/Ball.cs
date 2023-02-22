@@ -18,6 +18,9 @@ namespace DMIT1514_Lab3_Kiana_Leslie
         public Vector2 velocity;
         public int screenWidth;
         public int screenHeight;
+        public int speed;
+        public int paddle1Hits;
+        public int paddle2Hits;
         public static Random random = new Random();
 
         public Ball(Texture2D ballTexture, Vector2 ballPosition, Vector2 ballVelocity, int screenW, int screenH)
@@ -57,12 +60,22 @@ namespace DMIT1514_Lab3_Kiana_Leslie
 
             // Choose random direction
             float angle = MathHelper.ToRadians(random.Next(45, 135));
-            velocity = new Vector2(5f * (float)Math.Cos(angle), 5f * (float)Math.Sin(angle));
+            velocity = new Vector2(speed * (float)Math.Cos(angle), speed * (float)Math.Sin(angle));
             if (random.NextDouble() > 0.5)
             {
                 velocity.X *= -1;
             }
         }
+        public void BallCollidesWithPaddle1()
+        {
+            velocity.X = -velocity.X;
+            paddle1Hits++;
+        }
 
+        public void BallCollidesWithPaddle2()
+        {
+            velocity.X = -velocity.X;
+            paddle2Hits++;
+        }
     }
 }

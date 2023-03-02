@@ -4,15 +4,19 @@ using Microsoft.Xna.Framework.Input;
 
 namespace DMIT1514_Lab4_Kiana_Leslie
 {
-    public class Player
+    public class Player : GameObject
     {
-        Texture2D playerTexture;
-        Rectangle playerRectangle;
+        public Transform transform;
+        public Sprite sprite;
         Controls playerControls;
-        //projectiles
-        //ref to gameObject
-        Vector2 playerPosition;
-        Vector2 playerDirection;
+
+        //Texture2D playerTexture;
+        //Rectangle playerRectangle;
+        //Controls playerControls;
+        ////projectiles
+        ////ref to gameObject
+        //Vector2 playerPosition;
+        //Vector2 playerDirection;
 
         float playerSpeed;
         int currentPlayerHealth;
@@ -24,11 +28,17 @@ namespace DMIT1514_Lab4_Kiana_Leslie
 
         PlayerState currentPlayerState = PlayerState.Alive;
 
-        public Player(Texture2D texture, Vector2 position, Controls controls)
+        //public Player(Texture2D texture, Vector2 position, Controls controls)
+        //{
+        //    playerControls = controls;
+        //    playerTexture = texture;
+        //    playerPosition = position;
+        //}
+        public Player(Sprite sprite, Transform transform, Controls controls) :base(sprite, transform)
         {
+            this.sprite = sprite;
+            this.transform = transform;
             playerControls = controls;
-            playerTexture = texture;
-            playerPosition = position;
         }
         public void Update(GameTime gameTime)
         {
@@ -44,16 +54,24 @@ namespace DMIT1514_Lab4_Kiana_Leslie
                     break;
             }
         }
-        public void PlayerMove()
+        public void PlayerMove() //implements what any gameObject can do - MOVE
         {
-            if (playerControls.positiveDirection)
+            if (playerControls.positiveDirection == playerControls.negativeDirection)
             {
-                //move right
+                transform.Direction = new Vector2();
             }
-            if (playerControls.negativeDirection)
+            else
             {
-                //move left
+                if (playerControls.positiveDirection)
+                {
+
+                }
+                if (playerControls.negativeDirection)
+                {
+
+                }
             }
+            Move(transform.Direction * playerSpeed);
         }
         public void PlayerFire()
         {

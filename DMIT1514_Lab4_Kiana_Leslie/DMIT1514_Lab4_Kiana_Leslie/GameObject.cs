@@ -24,6 +24,10 @@ namespace DMIT1514_Lab4_Kiana_Leslie
             transform.TranslatePosition(offset);
             sprite.UpdateBounds(transform);
         }
+        public void TranslatePosition(Vector2 offset)
+        {
+            transform.Position = new Vector2(transform.Position.X + offset.X, transform.Position.Y + offset.Y);
+        }
         public void Update(GameTime gameTime)
         {
             //transform.CheckBounds(sprite);

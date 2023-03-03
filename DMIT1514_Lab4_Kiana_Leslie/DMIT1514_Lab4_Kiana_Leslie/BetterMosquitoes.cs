@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MosquitoAttack;
+using System.Collections.Generic;
 
 namespace DMIT1514_Lab4_Kiana_Leslie
 {
@@ -13,10 +14,10 @@ namespace DMIT1514_Lab4_Kiana_Leslie
         const int WINDOWWIDTH = 800;
         const int WINDOWHEIGHT = 600;
 
-        CelAnimationSequence mosquito;
-        CelAnimationSequence cannon;
-        CelAnimationSequence fireBall;
-        CelAnimationSequence poof;
+        //CelAnimationSequence mosquito;
+        //CelAnimationSequence cannon;
+        //CelAnimationSequence fireBall;
+        //CelAnimationSequence poof;
 
         CelAnimationPlayer animationPlayer;
 
@@ -29,6 +30,7 @@ namespace DMIT1514_Lab4_Kiana_Leslie
         GameObject testObject;
         Sprite testSprite;
         Transform testTransform;
+        List<Player> playerList = new List<Player>();
         //********************************************************************************************************************************************************
         public BetterMosquitoes()
         {
@@ -42,17 +44,24 @@ namespace DMIT1514_Lab4_Kiana_Leslie
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            playerControls = new Controls(GamePad.GetState(0).DPad.Right == ButtonState.Pressed, GamePad.GetState(0).DPad.Left == ButtonState.Pressed, GamePad.GetState(0).Buttons.A == ButtonState.Pressed);
+            //playerControls = new Controls(GamePad.GetState(0).DPad.Right == ButtonState.Pressed, GamePad.GetState(0).DPad.Left == ButtonState.Pressed, GamePad.GetState(0).Buttons.A == ButtonState.Pressed);
             //Keyboard.GetState().IsKeyDown(Keys.A)
-
+            playerControls = new Controls(Keys.D, Keys.A, Keys.Space);
             base.Initialize();
             //INTITALIZE rect or bounds below base.Initalize();
 
             //********************************************************************************************************************************************************
-            player = new Player(testSprite, testTransform, playerControls);
+           // player = new Player(testSprite, testTransform, playerControls);
             testSprite = new Sprite(playerTexture, playerTexture.Bounds, 1);
             testTransform = new Transform();
             testObject = new GameObject(testSprite, testTransform);
+            
+            for(int count = 0; count < 3; count++)
+            {
+                Player newPlayer = new Player(testSprite, testTransform, playerControls);
+                newPlayer.transform.TranslatePosition(new Vector2(0, count * 200));
+                playerList.Add(newPlayer);
+            }
             //********************************************************************************************************************************************************
         }
 
@@ -63,19 +72,21 @@ namespace DMIT1514_Lab4_Kiana_Leslie
             bg = Content.Load<Texture2D>("Background");
             animationPlayer = new CelAnimationPlayer();
 
-            Texture2D spriteSheet = Content.Load<Texture2D>("Mosquito");
-            mosquito = new CelAnimationSequence(spriteSheet, 90, 1 / 8.0f);
-            Texture2D spriteSheet1 = Content.Load<Texture2D>("Cannon");
-            cannon = new CelAnimationSequence(spriteSheet1, 90, 1 / 8.0f);
-            Texture2D spriteSheet2 = Content.Load<Texture2D>("FireBall");
-            fireBall = new CelAnimationSequence(spriteSheet2, 90, 1 / 8.0f);
-            Texture2D spriteSheet3 = Content.Load<Texture2D>("Poof");
-            poof = new CelAnimationSequence(spriteSheet, 90, 1 / 8.0f);
+            playerTexture = Content.Load<Texture2D>("Cannon");
 
-            animationPlayer.Play(mosquito);
-            animationPlayer.Play(cannon);
-            animationPlayer.Play(fireBall);
-            animationPlayer.Play(poof);
+            //Texture2D spriteSheet = Content.Load<Texture2D>("Mosquito");
+            //mosquito = new CelAnimationSequence(spriteSheet, 90, 1 / 8.0f);
+            //Texture2D spriteSheet1 = Content.Load<Texture2D>("Cannon");
+            //cannon = new CelAnimationSequence(spriteSheet1, 90, 1 / 8.0f);
+            //Texture2D spriteSheet2 = Content.Load<Texture2D>("FireBall");
+            //fireBall = new CelAnimationSequence(spriteSheet2, 90, 1 / 8.0f);
+            //Texture2D spriteSheet3 = Content.Load<Texture2D>("Poof");
+            //poof = new CelAnimationSequence(spriteSheet, 90, 1 / 8.0f);
+
+            //animationPlayer.Play(mosquito);
+            //animationPlayer.Play(cannon);
+            //animationPlayer.Play(fireBall);
+            //animationPlayer.Play(poof);
         }
 
         protected override void Update(GameTime gameTime)
@@ -87,6 +98,12 @@ namespace DMIT1514_Lab4_Kiana_Leslie
 
             //********************************************************************************************************************************************************
             testObject.Update(gameTime);
+
+            foreach(Player player in playerList)
+            {
+                //player.transform.TranslatePosition(new Vector2(1, 0));
+                player.Update(gameTime);
+            }
             //********************************************************************************************************************************************************
 
             base.Update(gameTime);
@@ -102,6 +119,10 @@ namespace DMIT1514_Lab4_Kiana_Leslie
             animationPlayer.Draw(_spriteBatch, Vector2.Zero, SpriteEffects.None);
 
             //********************************************************************************************************************************************************
+            foreach(Player player in playerList)
+            {
+                player.Draw(_spriteBatch);
+            }
             testObject.Draw(_spriteBatch);
             //********************************************************************************************************************************************************
             _spriteBatch.End();

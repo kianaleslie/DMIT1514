@@ -27,7 +27,7 @@ namespace DMIT1514_Lab4_Kiana_Leslie
         //********************************************************************************************************************************************************
         Player player;
         Controls playerControls;
-        GameObject testObject;
+        //GameObject testObject;
         Sprite testSprite;
         Transform testTransform;
         List<Player> playerList = new List<Player>();
@@ -51,15 +51,15 @@ namespace DMIT1514_Lab4_Kiana_Leslie
             //INTITALIZE rect or bounds below base.Initalize();
 
             //********************************************************************************************************************************************************
-           // player = new Player(testSprite, testTransform, playerControls);
+           //player = new Player(testSprite, testTransform, playerControls);
             testSprite = new Sprite(playerTexture, playerTexture.Bounds, 1);
             testTransform = new Transform();
-            testObject = new GameObject(testSprite, testTransform);
+            //testObject = new GameObject(testSprite, testTransform);
             
             for(int count = 0; count < 3; count++)
             {
                 Player newPlayer = new Player(testSprite, testTransform, playerControls);
-                newPlayer.transform.TranslatePosition(new Vector2(0, count * 200));
+                newPlayer.transform.TranslatePosition(new Vector2(0, count * 128));
                 playerList.Add(newPlayer);
             }
             //********************************************************************************************************************************************************
@@ -97,7 +97,7 @@ namespace DMIT1514_Lab4_Kiana_Leslie
             animationPlayer.Update(gameTime);
 
             //********************************************************************************************************************************************************
-            testObject.Update(gameTime);
+            //testObject.Update(gameTime);
 
             foreach(Player player in playerList)
             {
@@ -123,7 +123,7 @@ namespace DMIT1514_Lab4_Kiana_Leslie
             {
                 player.Draw(_spriteBatch);
             }
-            testObject.Draw(_spriteBatch);
+            //testObject.Draw(_spriteBatch);
             //********************************************************************************************************************************************************
             _spriteBatch.End();
             base.Draw(gameTime);

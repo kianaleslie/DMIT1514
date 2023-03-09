@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
+using static DMIT1514_Lab2_Kiana_Leslie.Square;
 
 namespace DMIT1514_Lab2_Kiana_Leslie
 {
@@ -86,26 +87,36 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                     currentGameState = GameState.EvaluateMove;
                     break;
                 case GameState.EvaluateMove:
+                    bool taken = false;
                     foreach (Square tile in GameBoard)
                     {
                         if (tile.TrySetState(location.Position, (Square.SquareStates)(int)nextMove))
                         {
                             currentGameState = GameState.EvaluateBoard;
+                            taken = true;
                         }
                     }
-                    if (nextMove == BoardState.X)
+                    if (taken)
                     {
-                        nextMove = BoardState.O;
+                        if (nextMove == BoardState.X)
+                        {
+                            nextMove = BoardState.O;
+                        }
+                        else if (nextMove == BoardState.O)
+                        {
+                            nextMove = BoardState.X;
+                        }
                     }
-                    else if (nextMove == BoardState.O)
+                    else
                     {
-                        nextMove = BoardState.X;
+                        currentGameState = GameState.TakeTurn;
                     }
                     break;
                 case GameState.EvaluateBoard:
                     CheckWinOrTie checkWin = new CheckWinOrTie();
                     CheckWinOrTie checkTie = new CheckWinOrTie();
-                    if (checkWin.HasWon((Square.SquareStates)(int)nextMove + 1, GameBoard))
+                    SquareStates test = nextMove == BoardState.O ? (Square.SquareStates)(int)nextMove - 1: (Square.SquareStates)(int)nextMove + 1;
+                   if (checkWin.HasWon(test, GameBoard))
                     {
                         currentGameState = GameState.GameOver;
                     }
@@ -196,7 +207,7 @@ namespace DMIT1514_Lab2_Kiana_Leslie
                         _spriteBatch.DrawString(font, "O wins!", new Vector2(80, 50), Color.MidnightBlue, 0, textCenter, 2.0f, SpriteEffects.None, 0);
                     }
                     else
-                    if ((Square.SquareStates)(int)nextMove + 1 == Square.SquareStates.X)
+                    if ((Square.SquareStates)(int)nextMove - 1 == Square.SquareStates.X)
                     {
                         Vector2 textCenter = font.MeasureString("X wins!") / 2f;
                         _spriteBatch.DrawString(font, "X wins!", new Vector2(80, 50), Color.MidnightBlue, 0, textCenter, 2.0f, SpriteEffects.None, 0);

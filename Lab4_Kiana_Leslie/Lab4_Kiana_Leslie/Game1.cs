@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MosquitoAttack;
+using System.Collections.Specialized;
 
 namespace Lab4_Kiana_Leslie
 {
@@ -9,9 +11,19 @@ namespace Lab4_Kiana_Leslie
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        const int WIDTH = 800;
+        const int HEIGHT = 480;
+
+        CelAnimationSequence enemy;
+        CelAnimationSequence player;
+        CelAnimationPlayer animationPlayer;
+
+        Texture2D bgTexture;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferWidth = WIDTH;
+            _graphics.PreferredBackBufferHeight = HEIGHT;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -27,7 +39,17 @@ namespace Lab4_Kiana_Leslie
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            Texture2D spriteSheet = Content.Load<Texture2D>("enemy");
+            enemy = new CelAnimationSequence(spriteSheet, 100, 1 / 8.0f);
+            animationPlayer = new CelAnimationPlayer();
+            animationPlayer.Play(enemy);
+
+            Texture2D sprite = Content.Load<Texture2D>("player_");
+            player = new CelAnimationSequence(sprite, 100, 1 / 8.0f);
+            animationPlayer = new CelAnimationPlayer();
+            animationPlayer.Play(player);
+
+            bgTexture = Content.Load<Texture2D>("bg");
         }
 
         protected override void Update(GameTime gameTime)
@@ -36,6 +58,7 @@ namespace Lab4_Kiana_Leslie
                 Exit();
 
             // TODO: Add your update logic here
+            animationPlayer.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -45,7 +68,10 @@ namespace Lab4_Kiana_Leslie
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(bgTexture, new Rectangle(0, 0, WIDTH, HEIGHT), Color.White);
+            animationPlayer.Draw(_spriteBatch, new Vector2(200, 200), SpriteEffects.None);
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }

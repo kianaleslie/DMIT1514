@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MosquitoAttack;
 using System.Collections.Specialized;
 
 namespace Lab4_Kiana_Leslie
@@ -14,9 +13,10 @@ namespace Lab4_Kiana_Leslie
         const int WIDTH = 800;
         const int HEIGHT = 480;
 
-        CelAnimationSequence enemy;
-        CelAnimationSequence player;
+        CelAnimationSequence dragon;
+        CelAnimationSequence wizard;
         CelAnimationPlayer animationPlayer;
+        CelAnimationPlayer animationEnemy;
 
         Texture2D bgTexture;
         public Game1()
@@ -39,15 +39,15 @@ namespace Lab4_Kiana_Leslie
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Texture2D spriteSheet = Content.Load<Texture2D>("enemy");
-            enemy = new CelAnimationSequence(spriteSheet, 100, 1 / 8.0f);
-            animationPlayer = new CelAnimationPlayer();
-            animationPlayer.Play(enemy);
+            Texture2D spriteSheet = Content.Load<Texture2D>("dragon");
+            dragon = new CelAnimationSequence(spriteSheet, 100, 1 / 8.0f);
+            animationEnemy = new CelAnimationPlayer();
+            animationEnemy.Play(dragon);
 
-            Texture2D sprite = Content.Load<Texture2D>("player_");
-            player = new CelAnimationSequence(sprite, 100, 1 / 8.0f);
+            Texture2D sprite = Content.Load<Texture2D>("wizard");
+            wizard = new CelAnimationSequence(sprite, 20, 1 / 4.0f);
             animationPlayer = new CelAnimationPlayer();
-            animationPlayer.Play(player);
+            animationPlayer.Play(wizard);
 
             bgTexture = Content.Load<Texture2D>("bg");
         }
@@ -59,6 +59,7 @@ namespace Lab4_Kiana_Leslie
 
             // TODO: Add your update logic here
             animationPlayer.Update(gameTime);
+            animationEnemy.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -70,7 +71,8 @@ namespace Lab4_Kiana_Leslie
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             _spriteBatch.Draw(bgTexture, new Rectangle(0, 0, WIDTH, HEIGHT), Color.White);
-            animationPlayer.Draw(_spriteBatch, new Vector2(200, 200), SpriteEffects.None);
+            //animationPlayer.Draw(_spriteBatch, new Vector2(200, 100), SpriteEffects.None);
+            //animationEnemy.Draw(_spriteBatch, new Vector2(100, 700), SpriteEffects.None);
             _spriteBatch.End();
             base.Draw(gameTime);
         }

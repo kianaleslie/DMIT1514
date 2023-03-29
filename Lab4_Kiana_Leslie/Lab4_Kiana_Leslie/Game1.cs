@@ -10,8 +10,8 @@ namespace Lab4_Kiana_Leslie
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        const int WIDTH = 800;
-        const int HEIGHT = 480;
+        const int WIDTH = 550;
+        const int HEIGHT = 400;
 
         CelAnimationSequence dragon;
         CelAnimationSequence wizard;
@@ -40,7 +40,7 @@ namespace Lab4_Kiana_Leslie
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Texture2D spriteSheet = Content.Load<Texture2D>("dragon");
-            dragon = new CelAnimationSequence(spriteSheet, 100, 1 / 8.0f);
+           dragon = new CelAnimationSequence(spriteSheet, 100, 1 / 8.0f);
             animationEnemy = new CelAnimationPlayer();
             animationEnemy.Play(dragon);
 
@@ -71,8 +71,8 @@ namespace Lab4_Kiana_Leslie
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             _spriteBatch.Draw(bgTexture, new Rectangle(0, 0, WIDTH, HEIGHT), Color.White);
-            //animationPlayer.Draw(_spriteBatch, new Vector2(200, 100), SpriteEffects.None);
-            //animationEnemy.Draw(_spriteBatch, new Vector2(100, 700), SpriteEffects.None);
+            animationPlayer.Draw(_spriteBatch, new Vector2(200, 350), SpriteEffects.None);
+            animationEnemy.Draw(_spriteBatch, new Vector2(100, 30), SpriteEffects.None);
             _spriteBatch.End();
             base.Draw(gameTime);
         }

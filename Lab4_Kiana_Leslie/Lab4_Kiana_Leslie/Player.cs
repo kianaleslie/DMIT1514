@@ -16,12 +16,12 @@ namespace Lab4_Kiana_Leslie
             for (int index = 0; index < numProjectiles; index++)
             {
                 projectiles[index] = new PlayerProjectile();
-            } 
+            }
         }
 
         internal override void LoadContent(ContentManager content)
         {
-            animationSequenceAlive = new CelAnimationSequence(content.Load<Texture2D>("wizard"), 20, 1 / 8.0f);
+            animation = new CelAnimationSequence(content.Load<Texture2D>("wizard"), 31, 32, 1 / 8.0f);
             base.LoadContent(content);
         }
 

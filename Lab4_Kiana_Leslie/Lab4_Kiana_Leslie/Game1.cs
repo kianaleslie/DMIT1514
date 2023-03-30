@@ -11,7 +11,7 @@ namespace Lab4_Kiana_Leslie
 
         public const int WINDOWWIDTH = 550;
         public const int WINDOWHEIGHT = 400;
-        public const int ENEMIES = 1;
+        public const int ENEMIES = 7;
         public string message;
         public Texture2D bgTexture;
         public SpriteFont magraFont;
@@ -23,15 +23,14 @@ namespace Lab4_Kiana_Leslie
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
+            _graphics.PreferredBackBufferHeight = WINDOWHEIGHT;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
-            _graphics.PreferredBackBufferHeight = WINDOWHEIGHT;
-            _graphics.ApplyChanges();
             gameState = States.GameStates.Playing;
             keyboardState = Keyboard.GetState();
             player = new Player();
@@ -127,7 +126,7 @@ namespace Lab4_Kiana_Leslie
             switch (gameState)
             {
                 case States.GameStates.Playing:
-                    _spriteBatch.Draw(bgTexture, Vector2.Zero, Color.White);
+                    _spriteBatch.Draw(bgTexture, new Rectangle(0,0,WINDOWWIDTH, WINDOWHEIGHT), Color.White);
                     player.Draw(_spriteBatch);
                     foreach (Enemy mosquito in enemies)
                     {

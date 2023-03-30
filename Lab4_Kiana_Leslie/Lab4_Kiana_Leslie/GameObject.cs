@@ -11,8 +11,7 @@ namespace Lab4_Kiana_Leslie
         public int dyingMillis;
         public int numProjectiles;
 
-        public CelAnimationSequence animationSequenceAlive;
-        public CelAnimationSequence animationSequenceDying;
+        public CelAnimationSequence animation;
         public CelAnimationPlayer animationPlayer;
 
         public Vector2 position;
@@ -20,13 +19,14 @@ namespace Lab4_Kiana_Leslie
         public Rectangle gameBoundingBox;
         public int timerDyingMillis;
         public States.PlayerState playerState;
+        public Transform transform;
 
         public Projectile[] projectiles;
         internal Rectangle BoundingBox
         {
             get
             {
-                return new Rectangle((int)position.X, (int)position.Y, animationSequenceAlive.CelWidth, animationSequenceAlive.CelHeight);
+                return new Rectangle((int)position.X, (int)position.Y, animation.CelWidth, animation.CelHeight);
             }
         }
         public GameObject()
@@ -39,7 +39,7 @@ namespace Lab4_Kiana_Leslie
             this.position = position;
             animationPlayer = new();
 
-            animationPlayer.Play(animationSequenceAlive);
+            animationPlayer.Play(animation);
             this.gameBoundingBox = gameBoundingBox;
 
             playerState = States.PlayerState.Alive;
@@ -99,14 +99,16 @@ namespace Lab4_Kiana_Leslie
         }
         internal void Move(Vector2 direction)
         {
-            velocity = direction * maxSpeed;
+            position += direction;
+            //velocity = direction * maxSpeed;
+            //transform.Translate(direction);
         }
         internal void Die()
         {
             if (playerState == States.PlayerState.Alive)
             {
                 playerState = States.PlayerState.Dying;
-                animationPlayer.Play(animationSequenceDying);
+                animationPlayer.Play(animation);
                 timerDyingMillis = 0;
             }
         }
@@ -134,6 +136,20 @@ namespace Lab4_Kiana_Leslie
                 projectileIndex++;
             }
             return hit;
+        }
+        public struct Transform
+        {
+            public Vector2 Position;
+            public Vector2 Direction;
+            public Transform(Vector2 position, Vector2 direction, float rotation)
+            {
+                this.Position = position;
+                this.Direction = direction;
+            }
+            public void Translate(Vector2 offset)
+            {
+                Position += offset;
+            }
         }
     }
 }

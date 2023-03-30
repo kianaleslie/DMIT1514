@@ -3,11 +3,16 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Threading.Tasks.Dataflow;
 
 namespace Lab4_Kiana_Leslie
 {
     public class Enemy : GameObject
     {
+        float timer = 0;
+        float movementTimer = 0.1f;
+        int movementCount = 0;
+        float speed = 0.5f;
         protected const int randomFire = 1000;
         protected Random random = new();
 
@@ -33,7 +38,7 @@ namespace Lab4_Kiana_Leslie
 
         internal override void LoadContent(ContentManager content)
         {
-            animationSequenceAlive = new CelAnimationSequence(content.Load<Texture2D>("dragon"), 99, 1 / 8.0f);
+            animation = new CelAnimationSequence(content.Load<Texture2D>("dragon"), 58, 67, 1 / 8.0f);
             base.LoadContent(content);
         }
 
@@ -43,10 +48,21 @@ namespace Lab4_Kiana_Leslie
             switch (playerState)
             {
                 case States.PlayerState.Alive:
-                    if (BoundingBox.Left < gameBoundingBox.Left || BoundingBox.Right > gameBoundingBox.Right)
+                    if (movementCount == 60)
                     {
-                        velocity.X *= -1;
+                        transform.Direction = new Vector2(0, 2);
+                        movementCount = -1;
+                        speed = -speed;
+                        timer = 0;
                     }
+                    timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (timer > movementTimer && movementCount != 60)
+                    {
+                        transform.Direction = new Vector2(speed, 0);
+                        timer = 0;
+                        movementCount++;
+                    }
+                    Move(transform.Direction);
                     animationPlayer.Update(gameTime);
 
                     if (random.Next(1, randomFire) == 1)

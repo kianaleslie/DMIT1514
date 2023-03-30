@@ -41,7 +41,7 @@ namespace Lab4_Kiana_Leslie
                 enemies[index] = new Enemy();
             }
             base.Initialize();
-            player.Initialize(new Vector2(50, 325), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT));
+            player.Initialize(new Vector2(50, 350), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT));
             int dragonSpaces = 1;
             foreach (Enemy dragon in enemies)
             {
@@ -54,7 +54,7 @@ namespace Lab4_Kiana_Leslie
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            bgTexture = Content.Load<Texture2D>("bg");
+            bgTexture = Content.Load<Texture2D>("backG");
             magraFont = Content.Load<SpriteFont>("magra");
             player.LoadContent(Content);
             foreach (Enemy dragon in enemies)

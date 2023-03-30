@@ -10,25 +10,18 @@ namespace Lab4_Kiana_Leslie
         public Player()
         {
             maxSpeed = 275;
-            dyingMillis = 1000;
             numProjectiles = 10;
 
             projectiles = new Projectile[numProjectiles];
-            for (int c = 0; c < numProjectiles; c++)
+            for (int index = 0; index < numProjectiles; index++)
             {
-                projectiles[c] = new PlayerProjectile();
-            }
-            projectiles[0] = new EnemyProjectile();
-            projectiles[2] = new EnemyProjectile();
-            projectiles[4] = new EnemyProjectile();
-            projectiles[8] = new EnemyProjectile();
-            projectiles[9] = new EnemyProjectile();
+                projectiles[index] = new PlayerProjectile();
+            } 
         }
 
         internal override void LoadContent(ContentManager content)
         {
             animationSequenceAlive = new CelAnimationSequence(content.Load<Texture2D>("wizard"), 20, 1 / 8.0f);
-            //animationSequenceDying = new CelAnimationSequence(content.Load<Texture2D>("Poof"), 16, 1 / 8.0f);
             base.LoadContent(content);
         }
 

@@ -9,20 +9,20 @@ namespace Lab4_Kiana_Leslie
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        const int WIDTH = 550;
-        const int HEIGHT = 400;
+        public const int WINDOWWIDTH = 550;
+        public const int WINDOWHEIGHT = 400;
+        public const int ENEMIES = 1;
+        public string message;
+        public Texture2D bgTexture;
+        public SpriteFont magraFont;
+        public Player player;
+        public Enemy[] enemies;
 
-        CelAnimationSequence dragon;
-        CelAnimationSequence wizard;
-        CelAnimationPlayer animationPlayer;
-        CelAnimationPlayer animationEnemy;
-
-        Texture2D bgTexture;
+        public States.GameStates gameState;
+        public KeyboardState keyboardState;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = WIDTH;
-            _graphics.PreferredBackBufferHeight = HEIGHT;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -30,36 +30,100 @@ namespace Lab4_Kiana_Leslie
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            _graphics.PreferredBackBufferWidth = WINDOWWIDTH;
+            _graphics.PreferredBackBufferHeight = WINDOWHEIGHT;
+            _graphics.ApplyChanges();
+
+            gameState = States.GameStates.Playing;
+            keyboardState = Keyboard.GetState();
+            player = new Player();
+            enemies = new Enemy[ENEMIES];
+
+            for (int c = 0; c < ENEMIES; c++)
+            {
+                enemies[c] = new Enemy();
+            }
 
             base.Initialize();
+            player.Initialize(new Vector2(50, 325), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT));
+            int spaceBetweenMosquitoes = 1;
+            foreach (Enemy mosquito in enemies)
+            {
+                mosquito.Initialize(new Vector2(spaceBetweenMosquitoes, 25), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), new Vector2(-1, 0));
+                spaceBetweenMosquitoes += 50;
+            }
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Texture2D spriteSheet = Content.Load<Texture2D>("dragon");
-           dragon = new CelAnimationSequence(spriteSheet, 100, 1 / 8.0f);
-            animationEnemy = new CelAnimationPlayer();
-            animationEnemy.Play(dragon);
-
-            Texture2D sprite = Content.Load<Texture2D>("wizard");
-            wizard = new CelAnimationSequence(sprite, 20, 1 / 4.0f);
-            animationPlayer = new CelAnimationPlayer();
-            animationPlayer.Play(wizard);
-
             bgTexture = Content.Load<Texture2D>("bg");
+            magraFont = Content.Load<SpriteFont>("magra");
+
+            player.LoadContent(Content);
+
+            foreach (Enemy mosquito in enemies)
+            {
+                mosquito.LoadContent(Content);
+            }
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            KeyboardState kbState = Keyboard.GetState();
+            switch (gameState)
+            {
+                case States.GameStates.Playing:
+                    if (kbState.IsKeyDown(Keys.P) && keyboardState.IsKeyUp(Keys.P))
+                    {
+                        gameState = States.GameStates.Paused;
+                        message = "Game Paused, press P to start playing.";
+                    }
+                    if (kbState.IsKeyDown(Keys.Left))
+                    {
+                        player.Move(new Vector2(-1, 0));
+                    }
+                    else if (kbState.IsKeyDown(Keys.Right))
+                    {
+                        player.Move(new Vector2(1, 0));
+                    }
+                    else
+                    {
+                        player.Move(new Vector2(0, 0));
+                    }
+                    player.Update(gameTime);
 
-            // TODO: Add your update logic here
-            animationPlayer.Update(gameTime);
-            animationEnemy.Update(gameTime);
-
+                    if (kbState.IsKeyDown(Keys.Space) && keyboardState.IsKeyUp(Keys.Space))
+                    {
+                        player.Shoot();
+                    }
+                    foreach (Enemy mosquito in enemies)
+                    {
+                        mosquito.Update(gameTime);
+                        if (mosquito.Alive() && player.ProcessProjectileCollisions(mosquito.BoundingBox))
+                        {
+                            mosquito.Die();
+                        }
+                        if (player.Alive() && mosquito.ProcessProjectileCollisions(player.BoundingBox))
+                        {
+                            player.Die();
+                        }
+                    }
+                    break;
+                case States.GameStates.Paused:
+                    if (kbState.IsKeyDown(Keys.P) && keyboardState.IsKeyUp(Keys.P))
+                    {
+                        gameState = States.GameStates.Playing;
+                        message = "Paused";
+                    }
+                    break;
+                case States.GameStates.NewLevel:
+                    break;
+                case States.GameStates.Over:
+                    break;
+            }
+            keyboardState = kbState;
             base.Update(gameTime);
         }
 
@@ -67,12 +131,27 @@ namespace Lab4_Kiana_Leslie
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            _spriteBatch.Draw(bgTexture, new Rectangle(0, 0, WIDTH, HEIGHT), Color.White);
-            animationPlayer.Draw(_spriteBatch, new Vector2(200, 350), SpriteEffects.None);
-            animationEnemy.Draw(_spriteBatch, new Vector2(100, 30), SpriteEffects.None);
+
+            switch (gameState)
+            {
+                case States.GameStates.Playing:
+                    _spriteBatch.Draw(bgTexture, Vector2.Zero, Color.White);
+                    player.Draw(_spriteBatch);
+                    foreach (Enemy mosquito in enemies)
+                    {
+                        mosquito.Draw(_spriteBatch);
+                    }
+                    break;
+                case States.GameStates.Paused:
+                    _spriteBatch.Draw(bgTexture, Vector2.Zero, Color.LightGray);
+                    _spriteBatch.DrawString(magraFont, message, new Vector2(20, 50), Color.White);
+                    break;
+                case States.GameStates.Over:
+                    break;
+            }
             _spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }

@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Graphics;
 
-
-
 public class CelAnimationSequence
 {
     private Texture2D texture;

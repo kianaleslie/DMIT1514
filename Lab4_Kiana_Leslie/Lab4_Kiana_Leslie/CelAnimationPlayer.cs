@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
-
 /// <summary>
 /// Controls playback of a CelAnimationSequence.
 /// </summary>
@@ -40,11 +38,11 @@ public class CelAnimationPlayer
     /// Update the state of the CelAnimationPlayer.
     /// </summary>
     /// <param name="gameTime">Provides a snapshot of timing values.</param>
-    public void Update(GameTime GameTime)
+    public void Update(GameTime gameTime)
     {
         if (celAnimationSequence != null)
         {
-            celTimeElapsed += (float)GameTime.ElapsedGameTime.TotalSeconds;
+            celTimeElapsed += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (celTimeElapsed >= celAnimationSequence.CelTime)
             {

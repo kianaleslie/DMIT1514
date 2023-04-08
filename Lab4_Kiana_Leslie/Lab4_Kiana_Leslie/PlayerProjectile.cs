@@ -7,14 +7,13 @@ namespace Lab4_Kiana_Leslie
 {
     public class PlayerProjectile : Projectile
     {
-        public const float Speed = 100;
-        public const string TextureName = "playerProjectile";
+        public const float SPEED = 100;
+        public const string TEXTURE = "playerProjectile";
         public PlayerProjectile()
         {
-            speed = Speed;
-            textureName = TextureName;
+            speed = SPEED;
+            textureName = TEXTURE;
         }
-
         internal override void Draw(SpriteBatch spriteBatch)
         {
             switch (projectileState)

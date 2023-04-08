@@ -19,10 +19,11 @@ namespace Lab4_Kiana_Leslie
         }
         public enum GameStates
         {
-            Playing,
+            Menu,
+            LevelOne,
             Paused,
-            NewLevel,
-            Over
+            LevelTwo,
+            GameOver
         }
     }
 }

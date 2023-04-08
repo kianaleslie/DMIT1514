@@ -7,42 +7,38 @@ namespace Lab4_Kiana_Leslie
 {
     public class Player : GameObject
     {
+        private const float RELOADTIME = 0.25f;
+        private float reloadTimer;
+        private bool canFire;
+
         public Player()
         {
-            maxSpeed = 275;
-            numProjectiles = 10;
-
-            projectiles = new Projectile[numProjectiles];
-            for (int index = 0; index < numProjectiles; index++)
+            speed = 500f;
+            projectileCount = 12;
+            projectiles = new Projectile[projectileCount];
+            for (int index = 0; index < projectileCount; index++)
             {
                 projectiles[index] = new PlayerProjectile();
             }
         }
-
         internal override void LoadContent(ContentManager content)
         {
             animation = new CelAnimationSequence(content.Load<Texture2D>("wizard"), 31, 32, 1 / 8.0f);
             base.LoadContent(content);
         }
-
         internal override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
             switch (playerState)
             {
-
                 case States.PlayerState.Alive:
-                    if (BoundingBox.Left < gameBoundingBox.Left)
+                    if (Box.Left < bBox.Left)
                     {
-                        position.X = gameBoundingBox.Left;
+                        position.X = bBox.Left;
                     }
-                    else if (BoundingBox.Right > gameBoundingBox.Right)
+                    else if (Box.Right > bBox.Right)
                     {
-                        position.X = gameBoundingBox.Right - BoundingBox.Width;
-                    }
-                    else if (!velocity.Equals(Vector2.Zero))
-                    {
-                        animationPlayer.Update(gameTime);
+                        position.X = bBox.Right - Box.Width;
                     }
                     break;
                 case States.PlayerState.Dying:
@@ -55,5 +51,9 @@ namespace Lab4_Kiana_Leslie
         {
             base.Shoot(new Vector2(0, -1));
         }
+        //internal void Reload()
+        //{
+
+        //}
     }
 }

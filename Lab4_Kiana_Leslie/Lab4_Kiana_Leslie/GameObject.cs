@@ -7,22 +7,20 @@ namespace Lab4_Kiana_Leslie
 {
     public class GameObject
     {
-        public float maxSpeed;
-        public int dyingMillis;
-        public int numProjectiles;
-
+        public float speed;
+        public int timeToDie;
+        public int projectileCount;
+        public int timer;
         public CelAnimationSequence animation;
         public CelAnimationPlayer animationPlayer;
-
         public Vector2 position;
         public Vector2 velocity;
-        public Rectangle gameBoundingBox;
-        public int timerDyingMillis;
+        public Rectangle bBox;
         public States.PlayerState playerState;
         public Transform transform;
-
         public Projectile[] projectiles;
-        internal Rectangle BoundingBox
+
+        internal Rectangle Box
         {
             get
             {
@@ -33,23 +31,21 @@ namespace Lab4_Kiana_Leslie
         {
             
         }
-
-        internal void Initialize(Vector2 position, Rectangle gameBoundingBox)
+        internal void Initialize(Vector2 position, Rectangle bBox)
         {
             this.position = position;
             animationPlayer = new();
 
             animationPlayer.Play(animation);
-            this.gameBoundingBox = gameBoundingBox;
+            this.bBox = bBox;
 
             playerState = States.PlayerState.Alive;
 
             foreach (Projectile projectile in projectiles)
             {
-                projectile.Initialize(gameBoundingBox);
+                projectile.Initialize(bBox);
             }
         }
-
         internal virtual void LoadContent(ContentManager content)
         {
             foreach (Projectile projectile in projectiles)
@@ -57,7 +53,6 @@ namespace Lab4_Kiana_Leslie
                 projectile.LoadContent(content);
             }
         }
-
         internal virtual void Update(GameTime gameTime)
         {
             switch (playerState)
@@ -66,9 +61,9 @@ namespace Lab4_Kiana_Leslie
                     position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
                 case States.PlayerState.Dying:
-                    timerDyingMillis += gameTime.ElapsedGameTime.Milliseconds;
+                    timer += gameTime.ElapsedGameTime.Milliseconds;
                     animationPlayer.Update(gameTime);
-                    if (timerDyingMillis >= dyingMillis)
+                    if (timer >= timeToDie)
                     {
                         playerState = States.PlayerState.Dead;
                     }
@@ -86,8 +81,8 @@ namespace Lab4_Kiana_Leslie
             switch (playerState)
             {
                 case States.PlayerState.Alive:
+                    break;
                 case States.PlayerState.Dying:
-                    animationPlayer.Draw(spriteBatch, position, SpriteEffects.None);
                     break;
                 case States.PlayerState.Dead:
                     break;
@@ -109,7 +104,7 @@ namespace Lab4_Kiana_Leslie
             {
                 playerState = States.PlayerState.Dying;
                 animationPlayer.Play(animation);
-                timerDyingMillis = 0;
+                timer = 0;
             }
         }
         internal bool Alive()
@@ -120,13 +115,13 @@ namespace Lab4_Kiana_Leslie
         {
             int projectileIndex = 0;
             bool shot = false;
-            while (playerState == States.PlayerState.Alive && projectileIndex < numProjectiles && !shot)
+            while (playerState == States.PlayerState.Alive && projectileIndex < projectileCount && !shot)
             {
-                shot = projectiles[projectileIndex].Shoot(new Vector2(BoundingBox.Center.X, BoundingBox.Top), direction);
+                shot = projectiles[projectileIndex].Shoot(new Vector2(Box.Center.X, Box.Top), direction);
                 projectileIndex++;
             }
         }
-        internal bool ProcessProjectileCollisions(Rectangle boundingBox)
+        internal bool Collisions(Rectangle boundingBox)
         {
             bool hit = false;
             int projectileIndex = 0;

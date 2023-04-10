@@ -81,6 +81,7 @@ namespace Lab4_Kiana_Leslie
             switch (playerState)
             {
                 case States.PlayerState.Alive:
+                    animationPlayer.Draw(spriteBatch, position, SpriteEffects.None);
                     break;
                 case States.PlayerState.Dying:
                     break;

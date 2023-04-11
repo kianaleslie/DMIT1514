@@ -12,6 +12,7 @@ namespace Lab4_Kiana_Leslie
         public const int WINDOWWIDTH = 550;
         public const int WINDOWHEIGHT = 400;
         public const int ENEMIES = 7;
+        public float speed = 3f;
         public string message;
         public Texture2D bgTexture;
         public SpriteFont font;
@@ -83,15 +84,15 @@ namespace Lab4_Kiana_Leslie
                     }
                     if (kbState.IsKeyDown(Keys.Left))
                     {
-                        player.Move(new Vector2(-1, 0));
+                        player.Move(new Vector2(-1, 0) * speed);
                     }
                     else if (kbState.IsKeyDown(Keys.Right))
                     {
-                        player.Move(new Vector2(1, 0));
+                        player.Move(new Vector2(1, 0) * speed);
                     }
                     else
                     {
-                        player.Move(new Vector2(0, 0));
+                        player.Move(new Vector2(0, 0) * speed );
                     }
                     player.Update(gameTime);
 
@@ -102,12 +103,12 @@ namespace Lab4_Kiana_Leslie
                     foreach (Enemy dragons in enemies)
                     {
                         dragons.Update(gameTime);
-                        if (dragons.Alive() && player.Collisions(dragons.bBox))
+                        if (dragons.Alive() && player.Collisions(new Rectangle(dragons.position.ToPoint(), new Point(67, 58))))
                         {
                             dragons.Die();
                             score.PlayerScore();
                         }
-                        if (player.Alive() && dragons.Collisions(player.bBox))
+                        if (player.Alive() && dragons.Collisions(new Rectangle(player.position.ToPoint(), new Point(32, 31))))
                         {
                             player.Die();
                         }

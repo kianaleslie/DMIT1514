@@ -67,13 +67,13 @@ namespace Lab4_Kiana_Leslie
         }
         internal bool IsColliding(Rectangle boundingBox)
         {
-            bool hit = false;
+            bool collided = false;
             if (projectileState == States.ProjectileState.Flying && BoundingBox.Intersects(boundingBox))
             {
-                hit = true;
+                collided = true;
                 projectileState = States.ProjectileState.NotFlying;
             }
-            return hit;
+            return collided;
         }
     }
 }

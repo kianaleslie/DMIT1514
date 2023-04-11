@@ -16,11 +16,8 @@ namespace Lab4_Kiana_Leslie
 
         public Enemy()
         {
-            speed = 250;
-            projectileCount = 12;
-
+            projectileCount = 20;
             projectiles = new Projectile[projectileCount];
-
             for (int index = 0; index < projectileCount; index++)
             {
                 projectiles[index] = new EnemyProjectile();

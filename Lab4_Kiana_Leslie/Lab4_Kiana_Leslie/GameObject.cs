@@ -96,8 +96,6 @@ namespace Lab4_Kiana_Leslie
         internal void Move(Vector2 direction)
         {
             position += direction;
-            //velocity = direction * maxSpeed;
-            //transform.Translate(direction);
         }
         internal void Die()
         {
@@ -124,14 +122,14 @@ namespace Lab4_Kiana_Leslie
         }
         internal bool Collisions(Rectangle boundingBox)
         {
-            bool hit = false;
+            bool collided = false;
             int projectileIndex = 0;
-            while (!hit && projectileIndex < projectiles.Length)
+            while (!collided && projectileIndex < projectiles.Length)
             {
-                hit = projectiles[projectileIndex].IsColliding(boundingBox);
+                collided = projectiles[projectileIndex].IsColliding(boundingBox);
                 projectileIndex++;
             }
-            return hit;
+            return collided;
         }
         public struct Transform
         {

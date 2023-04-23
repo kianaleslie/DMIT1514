@@ -21,15 +21,16 @@ namespace Lab4_Kiana_Leslie
         public Texture2D bgTexture1;
         public Texture2D bgTexture2;
         public Texture2D bgTextureMenu;
+        public Texture2D barrierTexture;
         public SpriteFont font;
         public Player player;
+        public Buddy buddy;
         public Enemy[] enemieslevelOne;
         public Enemy[] enemieslevelTwo;
         public States.GameStates gameState;
         public KeyboardState keyState;
-        public Hud score;
-        public Barrier barrier = new Barrier(new Vector2(100, 400));
-        public Texture2D barrierTexture;
+        public Hud hud;
+        public Barrier barrier;
 
         public DragonSiege()
         {
@@ -44,6 +45,7 @@ namespace Lab4_Kiana_Leslie
             gameState = States.GameStates.Menu;
             keyState = Keyboard.GetState();
             player = new Player();
+            buddy = new Buddy();    
             enemieslevelOne = new Enemy[ENEMIES];
             enemieslevelTwo = new Enemy[ENEMIES2];
 
@@ -56,9 +58,9 @@ namespace Lab4_Kiana_Leslie
                 enemieslevelTwo[index] = new Enemy();
             }
             base.Initialize();
-            
+            barrier = new Barrier(barrierTexture, new Vector2(100, 100));
             player.Initialize(new Vector2(50, 350), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT));
-            //barrier.Initialize(new Vector2(100, 400), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT));
+            buddy.Initialize(new Vector2(90, 350), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT));
             int dragonSpace = 1;
             int enemySpace = 1;
             foreach (Enemy dragon in enemieslevelOne)
@@ -80,8 +82,9 @@ namespace Lab4_Kiana_Leslie
             bgTextureMenu = Content.Load<Texture2D>("bg");
             font = Content.Load<SpriteFont>("magra");
             player.LoadContent(Content);
-            barrier.LoadContent(Content);
-            score = new Hud(Content.Load<SpriteFont>("magra"), WINDOWWIDTH);
+            buddy.LoadContent(Content);
+            barrierTexture = Content.Load<Texture2D>("cloud-barriers");
+            hud = new Hud(Content.Load<SpriteFont>("magra"), WINDOWHEIGHT);
             foreach (Enemy dragon in enemieslevelOne)
             {
                 dragon.LoadContent(Content);
@@ -103,6 +106,7 @@ namespace Lab4_Kiana_Leslie
                     }
                     break;
                 case States.GameStates.LevelOne:
+                    gameState = States.GameStates.LevelOne;
                     if (enemieslevelOne.All(enemy => !enemy.Alive()))
                     {
                         gameState = States.GameStates.LevelTwo;
@@ -121,14 +125,17 @@ namespace Lab4_Kiana_Leslie
                         if (keys.IsKeyDown(Keys.Left))
                         {
                             player.Move(new Vector2(-1, 0) * speed);
+                            buddy.Move(new Vector2(-1, 0) * speed);
                         }
                         else if (keys.IsKeyDown(Keys.Right))
                         {
                             player.Move(new Vector2(1, 0) * speed);
+                            buddy.Move(new Vector2(1, 0) * speed);
                         }
                         else
                         {
                             player.Move(new Vector2(0, 0) * speed);
+                            buddy.Move(new Vector2(0, 0) * speed);
                         }
                     }
                     player.Update(gameTime);
@@ -136,6 +143,7 @@ namespace Lab4_Kiana_Leslie
                     if (keys.IsKeyDown(Keys.Space) && keyState.IsKeyUp(Keys.Space))
                     {
                         player.Shoot();
+                        buddy.Shoot();
                     }
                     foreach (Enemy dragons in enemieslevelOne)
                     {
@@ -143,11 +151,17 @@ namespace Lab4_Kiana_Leslie
                         if (dragons.Alive() && player.Collisions(new Rectangle(dragons.position.ToPoint(), new Point(67, 58))))
                         {
                             dragons.Die();
-                            score.PlayerScore();
+                            hud.PlayerScore();
+                            hud.HighScore();
                         }
                         if (player.Alive() && dragons.Collisions(new Rectangle(player.position.ToPoint(), new Point(32, 31))))
                         {
-                            player.Die();
+                            if (hud.Lives() == 0 && !player.Alive())
+                            {
+                                player.Die();
+                                hud.ScoreReset();
+                            }
+                            hud.Lives();
                         }
                     }
                     barrier.Update();
@@ -161,6 +175,7 @@ namespace Lab4_Kiana_Leslie
                     }
                     break;
                 case States.GameStates.LevelTwo:
+                    gameState = States.GameStates.LevelTwo;
                     if (enemieslevelTwo.All(enemy => !enemy.Alive()))
                     {
                         gameState = States.GameStates.GameOver;
@@ -179,14 +194,17 @@ namespace Lab4_Kiana_Leslie
                         if (keys.IsKeyDown(Keys.Left))
                         {
                             player.Move(new Vector2(-1, 0) * speed);
+                            buddy.Move(new Vector2(-1, 0) * speed);
                         }
                         else if (keys.IsKeyDown(Keys.Right))
                         {
                             player.Move(new Vector2(1, 0) * speed);
+                            buddy.Move(new Vector2(1, 0) * speed);
                         }
                         else
                         {
                             player.Move(new Vector2(0, 0) * speed);
+                            buddy.Move(new Vector2(0, 0) * speed);
                         }
                     }
                     player.Update(gameTime);
@@ -194,6 +212,7 @@ namespace Lab4_Kiana_Leslie
                     if (keys.IsKeyDown(Keys.Space) && keyState.IsKeyUp(Keys.Space))
                     {
                         player.Shoot();
+                        buddy.Shoot();
                     }
                     foreach (Enemy enemy in enemieslevelTwo)
                     {
@@ -201,7 +220,8 @@ namespace Lab4_Kiana_Leslie
                         if (enemy.Alive() && player.Collisions(new Rectangle(enemy.position.ToPoint(), new Point(67, 58))))
                         {
                             enemy.Die();
-                            score.PlayerScore();
+                            hud.PlayerScore();
+                            hud.HighScore();
                         }
                         if (player.Alive() && enemy.Collisions(new Rectangle(player.position.ToPoint(), new Point(32, 31))))
                         {
@@ -214,7 +234,7 @@ namespace Lab4_Kiana_Leslie
                 case States.GameStates.GameOver:
                     if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                     {
-                        score.ScoreReset();
+                        hud.ScoreReset();
                         gameState = States.GameStates.Menu;
                     }
                     break;
@@ -231,21 +251,27 @@ namespace Lab4_Kiana_Leslie
                     _spriteBatch.Draw(bgTextureMenu, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
                     string message1 = "Welcome to Dragon Siege!";
                     string message2 = "Click anywhere to Start!";
+                    string message3 = "Press P to Pause the game.";
                     Vector2 messageSize = font.MeasureString(message1);
                     Vector2 messageSize2 = font.MeasureString(message2);
+                    Vector2 messageSize3 = font.MeasureString(message3);
                     Vector2 messagePosition = new Vector2((WINDOWWIDTH - messageSize.X) / 2, (WINDOWHEIGHT - messageSize.Y) / 8);
-                    Vector2 messagePosition2 = new Vector2((WINDOWWIDTH - messageSize2.X) / 2, (WINDOWHEIGHT - messageSize2.Y) / 2);
+                    Vector2 messagePosition2 = new Vector2((WINDOWWIDTH - messageSize2.X) / 2, (WINDOWHEIGHT - messageSize2.Y) / 4);
+                    Vector2 messagePosition3 = new Vector2((WINDOWWIDTH - messageSize2.X) / 2, (WINDOWHEIGHT - messageSize2.Y) / 2);
                     _spriteBatch.DrawString(font, message1, messagePosition, Color.White);
                     _spriteBatch.DrawString(font, message2, messagePosition2, Color.White);
+                    _spriteBatch.DrawString(font, message3, messagePosition3, Color.White);
                     break;
                 case States.GameStates.LevelOne:
                     _spriteBatch.Draw(bgTexture1, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
                     player.Draw(_spriteBatch);
+                    buddy.Draw(_spriteBatch);
                     foreach (Enemy dragon in enemieslevelOne)
                     {
                         dragon.Draw(_spriteBatch);
                     }
                     barrier.Draw(_spriteBatch);
+                    hud.Draw(_spriteBatch);
                     break;
                 case States.GameStates.Paused:
                     _spriteBatch.Draw(bgTextureMenu, Vector2.Zero, Color.White);
@@ -254,22 +280,22 @@ namespace Lab4_Kiana_Leslie
                 case States.GameStates.LevelTwo:
                     _spriteBatch.Draw(bgTexture2, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
                     player.Draw(_spriteBatch);
+                    buddy.Draw(_spriteBatch);
                     foreach (Enemy enemy in enemieslevelTwo)
                     {
                         enemy.Draw(_spriteBatch);
                     }
                     barrier.Draw(_spriteBatch);
+                    hud.Draw(_spriteBatch);
                     break;
                 case States.GameStates.GameOver:
                     _spriteBatch.Draw(bgTextureMenu, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
-                    string gameOver1 = "Game Over!";
-                    string gameOver2 = "Hit enter to play again!";
-                    Vector2 gameOverSize = font.MeasureString(gameOver1);
-                    Vector2 gameOverSize2 = font.MeasureString(gameOver2);
-                    Vector2 mPos = new Vector2((WINDOWWIDTH - gameOverSize.X) / 2, (WINDOWHEIGHT - gameOverSize.Y) / 8);
-                    Vector2 mPosition = new Vector2((WINDOWWIDTH - gameOverSize2.X) / 2, (WINDOWHEIGHT - gameOverSize2.Y) / 2);
-                    _spriteBatch.DrawString(font, gameOver1, mPos, Color.White);
-                    _spriteBatch.DrawString(font, gameOver2, mPosition, Color.White);
+                    string gameOver = string.Format("Game Over!");
+                    string gameOver2 = string.Format("Press Enter to Play Again!");
+                    Vector2 gameOverPos = new Vector2((DragonSiege.WINDOWWIDTH - font.MeasureString(gameOver).X) / 2, 10);
+                    Vector2 goPos = new Vector2((DragonSiege.WINDOWWIDTH - font.MeasureString(gameOver2).X) / 2, 40);
+                    _spriteBatch.DrawString(font, gameOver, gameOverPos, Color.White);
+                    _spriteBatch.DrawString(font, gameOver2, goPos, Color.White);
                     break;
             }
             _spriteBatch.End();

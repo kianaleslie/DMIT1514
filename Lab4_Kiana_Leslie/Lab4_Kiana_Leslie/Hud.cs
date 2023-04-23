@@ -10,6 +10,7 @@ namespace Lab4_Kiana_Leslie
         public int screenHeight;
         public int playerScore;
         public int highScore;
+        public int lives;
 
         public Hud(SpriteFont font, int screenHeight)
         {
@@ -17,15 +18,19 @@ namespace Lab4_Kiana_Leslie
             this.screenHeight = screenHeight;
             playerScore = 0;
             highScore = 0;
+            lives = 3;
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            string scoreText = string.Format("{0}", playerScore);
+            string scoreText = string.Format("Score: {0}", playerScore);
             string highScoreText = string.Format("High Score: {0}", highScore);
-            Vector2 scorePosition = new Vector2((DragonSiege.WINDOWWIDTH - font.MeasureString(scoreText).X) / 2, 10);
-            Vector2 highScorePosition = new Vector2((DragonSiege.WINDOWWIDTH - font.MeasureString(highScoreText).X) / 2, 40);
+            string livesText = string.Format("Lives: {0}", lives);
+            Vector2 scorePosition = new Vector2(20, 1);
+            Vector2 highScorePosition = new Vector2(190, 1);
+            Vector2 livesPos = new Vector2(420, 1);
             spriteBatch.DrawString(font, scoreText, scorePosition, Color.Black);
             spriteBatch.DrawString(font, highScoreText, highScorePosition, Color.Black);
+            spriteBatch.DrawString(font, livesText, livesPos, Color.Black);
         }
         public void PlayerScore()
         {
@@ -38,6 +43,10 @@ namespace Lab4_Kiana_Leslie
         public void ScoreReset()
         {
             playerScore = 0;
+        }
+        public int Lives()
+        {
+            return lives -= 1;
         }
     }
 }

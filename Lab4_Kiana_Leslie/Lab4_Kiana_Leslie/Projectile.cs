@@ -64,6 +64,10 @@ namespace Lab4_Kiana_Leslie
             }
             return shot;
         }
+        internal void Reload()
+        {
+            projectileState = States.ProjectileState.NotFlying;
+        }
         internal bool IsColliding(Rectangle bBox)
         {
             bool collided = false;

@@ -61,7 +61,7 @@
 /processorParam:TextureFormat=Color
 /build:buddyy.png
 
-#begin cloud-barriers.png
+#begin clouds.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -71,7 +71,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:cloud-barriers.png
+/build:clouds.png
 
 #begin dragon.png
 /importer:TextureImporter

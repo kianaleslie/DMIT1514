@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using static Lab4_Kiana_Leslie.States;
 
@@ -14,7 +13,7 @@ namespace Lab4_Kiana_Leslie
         public Rectangle barrier;
         public Projectile[] playerProjectiles;
         public Projectile[] enemyProjectiles;
-        
+
         public Rectangle bBox;
         public int playerProjectileCount;
         public int enemyProjectileCount;
@@ -42,13 +41,9 @@ namespace Lab4_Kiana_Leslie
         {
             return new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
         }
-        //internal void LoadContent(ContentManager content)
-        //{
-        //    texture = content.Load<Texture2D>("cloud-barriers");
-        //}
         internal void Update()
         {
-            position = new Vector2(100, 200);
+            //position = new Vector2(115, 225);
             //foreach (Projectile projectile in playerProjectiles)
             //{
             //    if (projectile.Box.Intersects(barrier))
@@ -66,7 +61,7 @@ namespace Lab4_Kiana_Leslie
         }
         internal void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, barrier, Color.White);
+            spriteBatch.Draw(texture, position, Color.White);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Lab4_Kiana_Leslie;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Linq;
@@ -31,6 +30,7 @@ namespace Lab4_Kiana_Leslie
         public KeyboardState keyState;
         public Hud hud;
         public Barrier barrier;
+        public Barrier barrier2;
 
         public DragonSiege()
         {
@@ -58,7 +58,8 @@ namespace Lab4_Kiana_Leslie
                 enemieslevelTwo[index] = new Enemy();
             }
             base.Initialize();
-            barrier = new Barrier(barrierTexture, new Vector2(100, 100));
+            barrier = new Barrier(barrierTexture, new Vector2(150, 225));
+            barrier2 = new Barrier(barrierTexture, new Vector2(325, 225));
             player.Initialize(new Vector2(50, 350), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT));
             buddy.Initialize(new Vector2(90, 350), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT));
             int dragonSpace = 1;
@@ -83,7 +84,7 @@ namespace Lab4_Kiana_Leslie
             font = Content.Load<SpriteFont>("magra");
             player.LoadContent(Content);
             buddy.LoadContent(Content);
-            barrierTexture = Content.Load<Texture2D>("cloud-barriers");
+            barrierTexture = Content.Load<Texture2D>("clouds");
             hud = new Hud(Content.Load<SpriteFont>("magra"), WINDOWHEIGHT);
             foreach (Enemy dragon in enemieslevelOne)
             {
@@ -156,15 +157,16 @@ namespace Lab4_Kiana_Leslie
                         }
                         if (player.Alive() && dragons.Collisions(new Rectangle(player.position.ToPoint(), new Point(32, 31))))
                         {
-                            if (hud.Lives() == 0 && !player.Alive())
+                            if (hud.GetLives() == 0 && !player.Alive())
                             {
                                 player.Die();
                                 hud.ScoreReset();
                             }
-                            hud.Lives();
+                            hud.DecreaseLives();
                         }
                     }
                     barrier.Update();
+                    barrier2.Update();
                     keyState = Keyboard.GetState();
                     break;
                 case States.GameStates.Paused:
@@ -229,6 +231,7 @@ namespace Lab4_Kiana_Leslie
                         }
                     }
                     barrier.Update();
+                    barrier2.Update();
                     keyState = Keyboard.GetState();
                     break;
                 case States.GameStates.GameOver:
@@ -271,6 +274,7 @@ namespace Lab4_Kiana_Leslie
                         dragon.Draw(_spriteBatch);
                     }
                     barrier.Draw(_spriteBatch);
+                    barrier2.Draw(_spriteBatch);
                     hud.Draw(_spriteBatch);
                     break;
                 case States.GameStates.Paused:
@@ -286,6 +290,7 @@ namespace Lab4_Kiana_Leslie
                         enemy.Draw(_spriteBatch);
                     }
                     barrier.Draw(_spriteBatch);
+                    barrier2.Draw(_spriteBatch);
                     hud.Draw(_spriteBatch);
                     break;
                 case States.GameStates.GameOver:

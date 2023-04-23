@@ -44,9 +44,13 @@ namespace Lab4_Kiana_Leslie
         {
             playerScore = 0;
         }
-        public int Lives()
+        public int DecreaseLives()
         {
             return lives -= 1;
+        }
+        public int GetLives()
+        {
+            return lives;
         }
     }
 }

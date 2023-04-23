@@ -6,25 +6,24 @@ namespace Lab4_Kiana_Leslie
 {
     public class Projectile
     {
-        protected Vector2 position;
-        protected Vector2 velocity;
-        protected Texture2D texture;
-        protected Rectangle gameBoundingBox;
-
-        protected float speed;
-        protected string textureName;
-       
+        public Vector2 position;
+        public Vector2 velocity;
+        public Texture2D texture;
+        public Rectangle bBox;
+        public float speed;
+        public string textureName;
         public States.ProjectileState projectileState;
-        internal Rectangle BoundingBox
+
+        internal Rectangle Box
         {
             get
             {
                 return new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
             }
         }
-        internal virtual void Initialize(Rectangle gameBoundingBox)
+        internal virtual void Initialize(Rectangle bBox)
         {
-            this.gameBoundingBox = gameBoundingBox;
+            this.bBox = bBox;
             projectileState = States.ProjectileState.NotFlying;
         }
 
@@ -38,7 +37,7 @@ namespace Lab4_Kiana_Leslie
             {
                 case States.ProjectileState.Flying:
                     position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    if (!BoundingBox.Intersects(gameBoundingBox))
+                    if (!Box.Intersects(bBox))
                     {
                         projectileState = States.ProjectileState.NotFlying;
                     }
@@ -65,10 +64,10 @@ namespace Lab4_Kiana_Leslie
             }
             return shot;
         }
-        internal bool IsColliding(Rectangle boundingBox)
+        internal bool IsColliding(Rectangle bBox)
         {
             bool collided = false;
-            if (projectileState == States.ProjectileState.Flying && BoundingBox.Intersects(boundingBox))
+            if (projectileState == States.ProjectileState.Flying && Box.Intersects(bBox))
             {
                 collided = true;
                 projectileState = States.ProjectileState.NotFlying;

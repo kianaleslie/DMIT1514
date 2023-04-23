@@ -7,9 +7,9 @@ namespace Lab4_Kiana_Leslie
 {
     public class Player : GameObject
     {
-        private const float RELOADTIME = 0.25f;
-        private float reloadTimer;
-        private bool canFire;
+        public const float RELOADTIME = 0.25f;
+        public float reloadTimer;
+        public bool canFire;
 
         public Player()
         {

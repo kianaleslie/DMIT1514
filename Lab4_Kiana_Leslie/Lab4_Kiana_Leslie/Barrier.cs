@@ -1,57 +1,39 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-
+using static Lab4_Kiana_Leslie.States;
 
 namespace Lab4_Kiana_Leslie
 {
     public class Barrier
     {
-        const int WIDTH = 32;
-        const int HEIGHT = 24;
-        const int MAXHEALTH = 3;
-        private Texture2D texture;
-        private Rectangle[] rectangles;
-        private int health;
+        public Texture2D texture;
+        public Rectangle barrier;
+        public Projectile[] projectiles;
+        public Vector2 position;
+        public Rectangle bBox;
 
-        public Rectangle[] Rectangles => rectangles;
-        public bool IsDestroyed => health <= 0;
-
-        public Barrier(Texture2D texture, Vector2 position)
+        public Barrier(Vector2 position)
         {
-            this.texture = texture;
-            rectangles = new Rectangle[MAXHEALTH * 4];
-
-            for (int i = 0; i < rectangles.Length; i++)
-            {
-                int row = i / 4;
-                int column = i % 4;
-
-                rectangles[i] = new Rectangle((int)position.X + column * WIDTH, (int)position.Y + row * HEIGHT, WIDTH, HEIGHT);
-            }
-            health = MAXHEALTH;
+            barrier = new Rectangle((int)position.X, (int)position.Y, texture.Width / 2, texture.Height);
         }
-
-        public void Draw(SpriteBatch spriteBatch)
+        internal void LoadContent(ContentManager content)
         {
-            foreach (Rectangle rectangle in rectangles)
-            {
-                spriteBatch.Draw(texture, rectangle, Color.White);
-            }
+            texture = content.Load<Texture2D>("cloud-barrier");
         }
-        public void TakeDamage()
+        internal void Update()
         {
-            if (health > 0)
+            foreach (Projectile projectile in projectiles)
             {
-                health--;
-                for (int i = 0; i < rectangles.Length; i++)
+                if (projectile.Box.Intersects(barrier))
                 {
-                    if (i / 4 == health)
-                    {
-                        rectangles[i].Width = 0;
-                        rectangles[i].Height = 0;
-                    }
+                    projectile.projectileState = States.ProjectileState.NotFlying;
                 }
             }
+        }
+        internal void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture, barrier, Color.White);
         }
     }
 }

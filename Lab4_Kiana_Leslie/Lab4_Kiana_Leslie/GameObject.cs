@@ -8,7 +8,7 @@ namespace Lab4_Kiana_Leslie
     public class GameObject
     {
         public float speed;
-        public int timeToDie;
+        public int die;
         public int projectileCount;
         public int timer;
         public CelAnimationSequence animation;
@@ -63,7 +63,7 @@ namespace Lab4_Kiana_Leslie
                 case States.PlayerState.Dying:
                     timer += gameTime.ElapsedGameTime.Milliseconds;
                     animationPlayer.Update(gameTime);
-                    if (timer >= timeToDie)
+                    if (timer >= die)
                     {
                         playerState = States.PlayerState.Dead;
                     }
@@ -76,7 +76,7 @@ namespace Lab4_Kiana_Leslie
                 projectile.Update(gameTime);
             }
         }
-        internal void Draw(SpriteBatch spriteBatch)
+        internal virtual void Draw(SpriteBatch spriteBatch)
         {
             switch (playerState)
             {

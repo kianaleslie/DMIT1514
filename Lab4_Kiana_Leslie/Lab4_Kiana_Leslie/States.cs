@@ -19,6 +19,8 @@ namespace Lab4_Kiana_Leslie
         }
         public enum GameStates
         {
+            //need initalize for level 1, 2, and "play again"
+            //Initalize,
             Menu,
             LevelOne,
             Paused,

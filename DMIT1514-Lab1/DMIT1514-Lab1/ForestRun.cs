@@ -46,11 +46,11 @@ namespace DMIT1514_Lab1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             forestTexture = Content.Load<Texture2D>("forest-bg");
-            personTexture = Content.Load<Texture2D>("george");
+            personTexture = Content.Load<Texture2D>("smallfry");
             bunnyTexture = Content.Load<Texture2D>("bunny");
 
             Texture2D spriteSheet = Content.Load<Texture2D>("FoxSpriteSheet0");
-            fox = new CelAnimationSequence(spriteSheet, 90, 1 / 8.0f);
+            fox = new CelAnimationSequence(spriteSheet, 90, 90, 1 / 8.0f);
             animationPlayer = new CelAnimationPlayer();
             animationPlayer.Play(fox);
         }
@@ -90,7 +90,7 @@ namespace DMIT1514_Lab1
             _spriteBatch.Draw(forestTexture, forestRectangle = new Rectangle(0, 0, 800, 444), Color.White);
             _spriteBatch.Draw(bunnyTexture, new Rectangle(580, 290, 100, 75), Color.White);
             _spriteBatch.Draw(personTexture, personDirection, Color.White);
-            animationPlayer.Draw(_spriteBatch, Vector2.Zero, SpriteEffects.None);
+            animationPlayer.Draw(_spriteBatch, new Vector2(200,300), SpriteEffects.None);
             _spriteBatch.End();
 
             base.Draw(gameTime);

@@ -24,10 +24,11 @@ namespace Lesson05_Animations
         /// <summary>
         /// Constructs a new CelAnimationSequence.
         /// </summary>        
-        public CelAnimationSequence(Texture2D texture, int celWidth, float celTime)
+        public CelAnimationSequence(Texture2D texture, int celWidth, int celHeight, float celTime)
         {
             this.texture = texture;
             this.celWidth = celWidth;
+            this.celHeight = celHeight;
             this.celTime = celTime;
 
             celHeight = Texture.Height;

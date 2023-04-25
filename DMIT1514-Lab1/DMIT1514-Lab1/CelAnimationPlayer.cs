@@ -13,9 +13,9 @@ namespace Lesson05_Animations
         private int celIndex;
         private float celTimeElapsed;
         private Rectangle celSourceRectangle;
-        const int rowCount = 2;
-        const int columnCount = 11;
-        const int spriteCount = 19;
+        //const int rowCount = 2;
+        //const int columnCount = 11;
+        //const int spriteCount = 19;
 
         public void Play(CelAnimationSequence celAnimationSequence)
         {

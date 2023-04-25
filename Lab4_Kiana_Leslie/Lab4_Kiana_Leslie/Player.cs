@@ -15,10 +15,10 @@ namespace Lab4_Kiana_Leslie
             for (int index = 0; index < projectileCount; index++)
             {
                 projectiles[index] = new PlayerProjectile();
-                if(projectiles.Length == 0)
-                {
-                    projectiles[index].Reload();
-                }
+                //if(projectiles.Length == 0)
+                //{
+                //    projectiles[index].Reload();
+                //}
             }
         }
         internal override void LoadContent(ContentManager content)
@@ -40,6 +40,7 @@ namespace Lab4_Kiana_Leslie
                     {
                         position.X = bBox.Right - Box.Width;
                     }
+                    animationPlayer.Update(gameTime);
                     break;
                 case States.PlayerState.Dying:
                     break;

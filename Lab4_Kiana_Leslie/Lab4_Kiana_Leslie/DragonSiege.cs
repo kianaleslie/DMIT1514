@@ -21,6 +21,7 @@ namespace Lab4_Kiana_Leslie
         public Texture2D bgTexture2;
         public Texture2D bgTextureMenu;
         public Texture2D barrierTexture;
+        public Texture2D textureHud;
         public SpriteFont font;
         public Player player;
         public Buddy buddy;
@@ -61,7 +62,7 @@ namespace Lab4_Kiana_Leslie
             barrier = new Barrier(barrierTexture, new Vector2(150, 225));
             barrier2 = new Barrier(barrierTexture, new Vector2(325, 225));
             player.Initialize(new Vector2(50, 350), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT));
-            buddy.Initialize(new Vector2(90, 350), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT));
+            buddy.Initialize(new Vector2(80, 335), new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT));
             int dragonSpace = 1;
             int enemySpace = 1;
             foreach (Enemy dragon in enemieslevelOne)
@@ -86,6 +87,7 @@ namespace Lab4_Kiana_Leslie
             buddy.LoadContent(Content);
             barrierTexture = Content.Load<Texture2D>("clouds");
             hud = new Hud(Content.Load<SpriteFont>("magra"), WINDOWHEIGHT);
+            textureHud = Content.Load<Texture2D>("whiteBlock"); 
             foreach (Enemy dragon in enemieslevelOne)
             {
                 dragon.LoadContent(Content);
@@ -144,7 +146,7 @@ namespace Lab4_Kiana_Leslie
                     if (keys.IsKeyDown(Keys.Space) && keyState.IsKeyUp(Keys.Space))
                     {
                         player.Shoot();
-                        buddy.Shoot();
+                        //buddy.Shoot();
                     }
                     foreach (Enemy dragons in enemieslevelOne)
                     {
@@ -214,7 +216,7 @@ namespace Lab4_Kiana_Leslie
                     if (keys.IsKeyDown(Keys.Space) && keyState.IsKeyUp(Keys.Space))
                     {
                         player.Shoot();
-                        buddy.Shoot();
+                        //buddy.Shoot();
                     }
                     foreach (Enemy enemy in enemieslevelTwo)
                     {
@@ -260,13 +262,14 @@ namespace Lab4_Kiana_Leslie
                     Vector2 messageSize3 = font.MeasureString(message3);
                     Vector2 messagePosition = new Vector2((WINDOWWIDTH - messageSize.X) / 2, (WINDOWHEIGHT - messageSize.Y) / 8);
                     Vector2 messagePosition2 = new Vector2((WINDOWWIDTH - messageSize2.X) / 2, (WINDOWHEIGHT - messageSize2.Y) / 4);
-                    Vector2 messagePosition3 = new Vector2((WINDOWWIDTH - messageSize2.X) / 2, (WINDOWHEIGHT - messageSize2.Y) / 2);
+                    Vector2 messagePosition3 = new Vector2((WINDOWWIDTH - messageSize2.X) / 2, (WINDOWHEIGHT - messageSize3.Y) / 2);
                     _spriteBatch.DrawString(font, message1, messagePosition, Color.White);
                     _spriteBatch.DrawString(font, message2, messagePosition2, Color.White);
                     _spriteBatch.DrawString(font, message3, messagePosition3, Color.White);
                     break;
                 case States.GameStates.LevelOne:
                     _spriteBatch.Draw(bgTexture1, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
+                    _spriteBatch.Draw(textureHud, new Rectangle(0, 0, WINDOWWIDTH, 32), Color.White);
                     player.Draw(_spriteBatch);
                     buddy.Draw(_spriteBatch);
                     foreach (Enemy dragon in enemieslevelOne)
@@ -275,6 +278,7 @@ namespace Lab4_Kiana_Leslie
                     }
                     barrier.Draw(_spriteBatch);
                     barrier2.Draw(_spriteBatch);
+                    
                     hud.Draw(_spriteBatch);
                     break;
                 case States.GameStates.Paused:
@@ -291,6 +295,7 @@ namespace Lab4_Kiana_Leslie
                     }
                     barrier.Draw(_spriteBatch);
                     barrier2.Draw(_spriteBatch);
+                    _spriteBatch.Draw(textureHud, new Vector2(200, 550), Color.White);
                     hud.Draw(_spriteBatch);
                     break;
                 case States.GameStates.GameOver:

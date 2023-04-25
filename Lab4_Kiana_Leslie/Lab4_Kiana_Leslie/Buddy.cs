@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace Lab4_Kiana_Leslie
 {
@@ -15,15 +13,15 @@ namespace Lab4_Kiana_Leslie
             for (int index = 0; index < projectileCount; index++)
             {
                 projectiles[index] = new PlayerProjectile();
-                if(projectiles.Length == 0)
-                {
-                    projectiles[index].Reload();
-                }
+                //if(projectiles.Length == 0)
+                //{
+                //    projectiles[index].Reload();
+                //}
             }
         }
         internal override void LoadContent(ContentManager content)
         {
-            animation = new CelAnimationSequence(content.Load<Texture2D>("buddyy"), 31, 32, 1 / 8.0f);
+            animation = new CelAnimationSequence(content.Load<Texture2D>("FoxSpriteSheet0"), 60, 50, 1 / 8.0f);
             base.LoadContent(content);
         }
         internal override void Update(GameTime gameTime)
@@ -40,6 +38,7 @@ namespace Lab4_Kiana_Leslie
                     {
                         position.X = bBox.Right - Box.Width;
                     }
+                    animationPlayer.Update(gameTime);
                     break;
                 case States.PlayerState.Dying:
                     break;
@@ -47,9 +46,9 @@ namespace Lab4_Kiana_Leslie
                     break;
             }
         }
-        internal void Shoot()
-        {
-            base.Shoot(new Vector2(0, -1));
-        }  
+        //internal void Shoot()
+        //{
+        //    base.Shoot(new Vector2(0, -1));
+        //}  
     }
 }

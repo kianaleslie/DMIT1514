@@ -1,67 +1,71 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using static Lab4_Kiana_Leslie.GameObject;
+using System;
 using static Lab4_Kiana_Leslie.States;
 
 namespace Lab4_Kiana_Leslie
 {
     public class Barrier
     {
-        public Texture2D texture;
-        public Vector2 position;
-        public int screenW;
-        public int screenH;
-        public Rectangle barrier;
-        public Projectile[] playerProjectiles;
-        public Projectile[] enemyProjectiles;
+        private Texture2D texture;
+        private Vector2 position;
+        private Transform transform;
 
-        public Rectangle bBox;
-        public int playerProjectileCount;
-        public int enemyProjectileCount;
-
+        private float timer = 0;
+        private float movementTimer = 0.1f;
+        private int movementCount = 0;
+        private float speed = 0.5f;
         public Barrier(Texture2D texture, Vector2 position)
         {
             this.texture = texture;
             this.position = position;
-            screenH = DragonSiege.WINDOWHEIGHT;
-            screenW = DragonSiege.WINDOWWIDTH;
-            //barrier = new Rectangle((int)position.X, (int)position.Y, 200 / 2, 100);
-            //playerProjectileCount = 12;
-            //playerProjectiles = new Projectile[playerProjectileCount];
-            //enemyProjectiles = new Projectile[enemyProjectileCount];
-            //for (int index = 0; index < playerProjectileCount; index++)
-            //{
-            //    playerProjectiles[index] = new PlayerProjectile();
-            //}
-            //for (int index = 0; index < enemyProjectileCount; index++)
-            //{
-            //    enemyProjectiles[index] = new EnemyProjectile();
-            //}
         }
         public Rectangle BoundingBox()
         {
             return new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
         }
-        internal void Update()
+        internal void Update(GameTime gameTime)
         {
-            //position = new Vector2(115, 225);
-            //foreach (Projectile projectile in playerProjectiles)
-            //{
-            //    if (projectile.Box.Intersects(barrier))
-            //    {
-            //        projectile.projectileState = States.ProjectileState.NotFlying;
-            //    }
-            //}
-            //foreach (Projectile projectile in enemyProjectiles)
-            //{
-            //    if (projectile.Box.Intersects(barrier))
-            //    {
-            //        projectile.projectileState = States.ProjectileState.NotFlying;
-            //    }
-            //}
+
+            if (movementCount == 20)
+            {
+                transform.Direction = new Vector2(0, 0);
+                movementCount = -1;
+                speed = -speed;
+                timer = 0;
+            }
+            timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (timer > movementTimer && movementCount != 20)
+            {
+                transform.Direction = new Vector2(speed, 0);
+                timer = 0;
+                movementCount++;
+            }
+            Move(transform.Direction);
+
         }
         internal void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, position, Color.White);
+        }
+        internal void Move(Vector2 direction)
+        {
+            position += direction;
+        }
+        public struct Transform
+        {
+            public Vector2 Position;
+            public Vector2 Direction;
+            public Transform(Vector2 position, Vector2 direction, float rotation)
+            {
+                this.Position = position;
+                this.Direction = direction;
+            }
+            public void Translate(Vector2 offset)
+            {
+                Position += offset;
+            }
         }
     }
 }

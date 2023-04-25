@@ -27,12 +27,12 @@ namespace Lab4_Kiana_Leslie
         public Buddy buddy;
         public Enemy[] enemieslevelOne;
         public Enemy[] enemieslevelTwo;
-        public States.GameStates gameState;
+        public GameStates gameState;
         public KeyboardState keyState;
         public Hud hud;
         public Barrier barrier;
         public Barrier barrier2;
-
+        public bool IsLvl1;
         public DragonSiege()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -46,7 +46,7 @@ namespace Lab4_Kiana_Leslie
             gameState = States.GameStates.Menu;
             keyState = Keyboard.GetState();
             player = new Player();
-            buddy = new Buddy();    
+            buddy = new Buddy();
             enemieslevelOne = new Enemy[ENEMIES];
             enemieslevelTwo = new Enemy[ENEMIES2];
 
@@ -87,7 +87,7 @@ namespace Lab4_Kiana_Leslie
             buddy.LoadContent(Content);
             barrierTexture = Content.Load<Texture2D>("clouds");
             hud = new Hud(Content.Load<SpriteFont>("magra"), WINDOWHEIGHT);
-            textureHud = Content.Load<Texture2D>("whiteBlock"); 
+            textureHud = Content.Load<Texture2D>("whiteBlock");
             foreach (Enemy dragon in enemieslevelOne)
             {
                 dragon.LoadContent(Content);
@@ -102,14 +102,14 @@ namespace Lab4_Kiana_Leslie
             KeyboardState keys = Keyboard.GetState();
             switch (gameState)
             {
-                case States.GameStates.Menu:
+                case GameStates.Menu:
                     if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                     {
                         gameState = States.GameStates.LevelOne;
                     }
                     break;
-                case States.GameStates.LevelOne:
-                    gameState = States.GameStates.LevelOne;
+                case GameStates.LevelOne:
+                    //gameState = States.GameStates.LevelOne;
                     if (enemieslevelOne.All(enemy => !enemy.Alive()))
                     {
                         gameState = States.GameStates.LevelTwo;
@@ -142,35 +142,31 @@ namespace Lab4_Kiana_Leslie
                         }
                     }
                     player.Update(gameTime);
-
-                    //BARRIER COLLISION
-                    //foreach (PlayerProjectile projectile in player.projectiles)
-                    //{
-                    //    if (projectile.IsColliding(barrier))
-                    //    {
-                    //        projectile.Update(gameTime);
-                    //        if (projectile.Bounds.Intersects(barrier.Bounds) || projectile.Bounds.Intersects(barrier2.Bounds))
-                    //        {
-                    //            projectile.IsColliding() = false;
-                    //        }
-                    //    }
-                    //}
-                    //foreach (Enemy enemy in enemieslevelOne)
-                    //{
-                    //    foreach (EnemyProjectile projectile in enemy.projectiles)
-                    //    {
-                    //        if (ProjectileState.Flying == ProjectileState.Flying)
-                    //        {
-                    //            projectile.Update(gameTime);
-                    //            if (projectile.Bounds.Intersects(barrier.Bounds) || projectile.Bounds.Intersects(barrier2.Bounds))
-                    //            {
-                    //                projectile.IsColliding = false;
-                    //            }
-                    //        }
-                    //    }
-                    //}
-
-
+                    foreach (PlayerProjectile projectile in player.projectiles)
+                    {
+                        if (projectile.projectileState == ProjectileState.Flying)
+                        {
+                            projectile.Update(gameTime);
+                            if (projectile.IsColliding(barrier.BoundingBox()) || projectile.IsColliding(barrier2.BoundingBox()))
+                            {
+                                _ = projectile.projectileState == ProjectileState.NotFlying;
+                            }
+                        }
+                    }
+                    foreach (Enemy enemy in enemieslevelOne)
+                    {
+                        foreach (EnemyProjectile projectile in enemy.projectiles)
+                        {
+                            if (projectile.projectileState == ProjectileState.Flying)
+                            {
+                                projectile.Update(gameTime);
+                                if (projectile.IsColliding(barrier.BoundingBox()) || projectile.IsColliding(barrier2.BoundingBox()))
+                                {
+                                    _ = projectile.projectileState == ProjectileState.NotFlying;
+                                }
+                            }
+                        }
+                    }
                     if (keys.IsKeyDown(Keys.Space) && keyState.IsKeyUp(Keys.Space))
                     {
                         player.Shoot();
@@ -195,18 +191,29 @@ namespace Lab4_Kiana_Leslie
                             hud.DecreaseLives();
                         }
                     }
-                    barrier.Update();
-                    barrier2.Update();
+                    barrier.Update(gameTime);
+                    barrier2.Update(gameTime);
                     keyState = Keyboard.GetState();
                     break;
-                case States.GameStates.Paused:
-                    if (keys.IsKeyDown(Keys.P) && keyState.IsKeyUp(Keys.P))
+                case GameStates.Paused:
+                    if (IsLvl1)
                     {
-                        gameState = States.GameStates.LevelOne;
-                        message = "Paused!";
+                        if (keys.IsKeyDown(Keys.P) && keyState.IsKeyUp(Keys.P))
+                        {
+                            gameState = States.GameStates.LevelOne;
+                            message = "Paused!";
+                        }
+                    }
+                    else
+                    {
+                        if (keys.IsKeyDown(Keys.P) && keyState.IsKeyUp(Keys.P))
+                        {
+                            gameState = States.GameStates.LevelOne;
+                            message = "Paused!";
+                        }
                     }
                     break;
-                case States.GameStates.LevelTwo:
+                case GameStates.LevelTwo:
                     gameState = States.GameStates.LevelTwo;
                     if (enemieslevelTwo.All(enemy => !enemy.Alive()))
                     {
@@ -240,7 +247,31 @@ namespace Lab4_Kiana_Leslie
                         }
                     }
                     player.Update(gameTime);
-
+                    foreach (PlayerProjectile projectile in player.projectiles)
+                    {
+                        if (projectile.projectileState == ProjectileState.Flying)
+                        {
+                            projectile.Update(gameTime);
+                            if (projectile.IsColliding(barrier.BoundingBox()) || projectile.IsColliding(barrier2.BoundingBox()))
+                            {
+                                _ = projectile.projectileState == ProjectileState.NotFlying;
+                            }
+                        }
+                    }
+                    foreach (Enemy enemy in enemieslevelTwo)
+                    {
+                        foreach (EnemyProjectile projectile in enemy.projectiles)
+                        {
+                            if (projectile.projectileState == ProjectileState.Flying)
+                            {
+                                projectile.Update(gameTime);
+                                if (projectile.IsColliding(barrier.BoundingBox()) || projectile.IsColliding(barrier2.BoundingBox()))
+                                {
+                                    _ = projectile.projectileState == ProjectileState.NotFlying;
+                                }
+                            }
+                        }
+                    }
                     if (keys.IsKeyDown(Keys.Space) && keyState.IsKeyUp(Keys.Space))
                     {
                         player.Shoot();
@@ -260,16 +291,17 @@ namespace Lab4_Kiana_Leslie
                             player.Die();
                         }
                     }
-                    barrier.Update();
-                    barrier2.Update();
+                    barrier.Update(gameTime);
+                    barrier2.Update(gameTime);
                     keyState = Keyboard.GetState();
                     break;
-                case States.GameStates.GameOver:
-                    if (Keyboard.GetState().IsKeyDown(Keys.Enter))
-                    {
-                        hud.ScoreReset();
-                        gameState = States.GameStates.Menu;
-                    }
+                case GameStates.GameOver:
+                    //Was going to make a re-play mechanic, but didn't have time to add a initalize case in as I need time to work on platformer
+                    //if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                    //{
+                    //hud.ScoreReset();
+                    //gameState = States.GameStates.Menu;
+                    //}
                     break;
             }
             keyState = Keyboard.GetState();
@@ -280,7 +312,7 @@ namespace Lab4_Kiana_Leslie
             _spriteBatch.Begin();
             switch (gameState)
             {
-                case States.GameStates.Menu:
+                case GameStates.Menu:
                     _spriteBatch.Draw(bgTextureMenu, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
                     string message1 = "Welcome to Dragon Siege!";
                     string message2 = "Click anywhere to Start!";
@@ -295,7 +327,7 @@ namespace Lab4_Kiana_Leslie
                     _spriteBatch.DrawString(font, message2, messagePosition2, Color.White);
                     _spriteBatch.DrawString(font, message3, messagePosition3, Color.White);
                     break;
-                case States.GameStates.LevelOne:
+                case GameStates.LevelOne:
                     _spriteBatch.Draw(bgTexture1, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
                     _spriteBatch.Draw(textureHud, new Rectangle(0, 0, WINDOWWIDTH, 32), Color.White);
                     player.Draw(_spriteBatch);
@@ -306,14 +338,14 @@ namespace Lab4_Kiana_Leslie
                     }
                     barrier.Draw(_spriteBatch);
                     barrier2.Draw(_spriteBatch);
-                    
+
                     hud.Draw(_spriteBatch);
                     break;
-                case States.GameStates.Paused:
+                case GameStates.Paused:
                     _spriteBatch.Draw(bgTextureMenu, Vector2.Zero, Color.White);
                     _spriteBatch.DrawString(font, message, new Vector2(180, 150), Color.White);
                     break;
-                case States.GameStates.LevelTwo:
+                case GameStates.LevelTwo:
                     _spriteBatch.Draw(bgTexture2, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
                     player.Draw(_spriteBatch);
                     buddy.Draw(_spriteBatch);
@@ -326,14 +358,18 @@ namespace Lab4_Kiana_Leslie
                     _spriteBatch.Draw(textureHud, new Vector2(200, 550), Color.White);
                     hud.Draw(_spriteBatch);
                     break;
-                case States.GameStates.GameOver:
+                case GameStates.GameOver:
                     _spriteBatch.Draw(bgTextureMenu, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
                     string gameOver = string.Format("Game Over!");
-                    string gameOver2 = string.Format("Press Enter to Play Again!");
-                    Vector2 gameOverPos = new Vector2((DragonSiege.WINDOWWIDTH - font.MeasureString(gameOver).X) / 2, 10);
-                    Vector2 goPos = new Vector2((DragonSiege.WINDOWWIDTH - font.MeasureString(gameOver2).X) / 2, 40);
+                    string gameOver2 = string.Format("Score: {0}", hud.playerScore);
+                    string gameOver3 = string.Format("New High Score: {0}", hud.highScore);
+                    Vector2 gameOverPos = new Vector2((WINDOWWIDTH - font.MeasureString(gameOver).X) / 2, 100);
+                    Vector2 goPos = new Vector2((WINDOWWIDTH - font.MeasureString(gameOver2).X) / 2, 180);
+                    Vector2 scoreDisplay = new Vector2((WINDOWWIDTH - font.MeasureString(gameOver3).X) / 2, 210);
                     _spriteBatch.DrawString(font, gameOver, gameOverPos, Color.White);
                     _spriteBatch.DrawString(font, gameOver2, goPos, Color.White);
+                    _spriteBatch.DrawString(font, gameOver3, scoreDisplay, Color.AliceBlue);
+                    hud.Draw(_spriteBatch);
                     break;
             }
             _spriteBatch.End();

@@ -64,10 +64,13 @@ namespace Lab4_Kiana_Leslie
             }
             return shot;
         }
-        internal void Reload()
-        {
-            projectileState = States.ProjectileState.NotFlying;
-        }
+        //Tried to do reload but again - timing issue
+        //internal void Reload()
+        //{
+        //    //int reloadSpeed;
+        //    //int bulletCount;
+        //    projectileState = States.ProjectileState.NotFlying;
+        //}
         internal bool IsColliding(Rectangle bBox)
         {
             bool collided = false;

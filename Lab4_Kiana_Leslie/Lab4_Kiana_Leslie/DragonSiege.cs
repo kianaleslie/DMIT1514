@@ -143,6 +143,34 @@ namespace Lab4_Kiana_Leslie
                     }
                     player.Update(gameTime);
 
+                    //BARRIER COLLISION
+                    //foreach (PlayerProjectile projectile in player.projectiles)
+                    //{
+                    //    if (projectile.IsColliding(barrier))
+                    //    {
+                    //        projectile.Update(gameTime);
+                    //        if (projectile.Bounds.Intersects(barrier.Bounds) || projectile.Bounds.Intersects(barrier2.Bounds))
+                    //        {
+                    //            projectile.IsColliding() = false;
+                    //        }
+                    //    }
+                    //}
+                    //foreach (Enemy enemy in enemieslevelOne)
+                    //{
+                    //    foreach (EnemyProjectile projectile in enemy.projectiles)
+                    //    {
+                    //        if (ProjectileState.Flying == ProjectileState.Flying)
+                    //        {
+                    //            projectile.Update(gameTime);
+                    //            if (projectile.Bounds.Intersects(barrier.Bounds) || projectile.Bounds.Intersects(barrier2.Bounds))
+                    //            {
+                    //                projectile.IsColliding = false;
+                    //            }
+                    //        }
+                    //    }
+                    //}
+
+
                     if (keys.IsKeyDown(Keys.Space) && keyState.IsKeyUp(Keys.Space))
                     {
                         player.Shoot();

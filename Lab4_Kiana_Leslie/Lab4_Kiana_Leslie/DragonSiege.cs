@@ -208,7 +208,7 @@ namespace Lab4_Kiana_Leslie
                     {
                         if (keys.IsKeyDown(Keys.P) && keyState.IsKeyUp(Keys.P))
                         {
-                            gameState = States.GameStates.LevelOne;
+                            gameState = States.GameStates.LevelTwo;
                             message = "Paused!";
                         }
                     }

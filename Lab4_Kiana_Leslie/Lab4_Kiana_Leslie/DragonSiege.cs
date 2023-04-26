@@ -331,7 +331,7 @@ namespace Lab4_Kiana_Leslie
                     _spriteBatch.Draw(bgTexture1, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
                     _spriteBatch.Draw(textureHud, new Rectangle(0, 0, WINDOWWIDTH, 32), Color.White);
                     player.Draw(_spriteBatch);
-                    buddy.Draw(_spriteBatch);
+                    buddy.Draw(_spriteBatch, new Vector2(player.position.X, player.position.Y));
                     foreach (Enemy dragon in enemieslevelOne)
                     {
                         dragon.Draw(_spriteBatch);
@@ -355,7 +355,7 @@ namespace Lab4_Kiana_Leslie
                     }
                     barrier.Draw(_spriteBatch);
                     barrier2.Draw(_spriteBatch);
-                    _spriteBatch.Draw(textureHud, new Vector2(200, 550), Color.White);
+                    _spriteBatch.Draw(textureHud, new Rectangle(0, 0, WINDOWWIDTH, 32), Color.White);
                     hud.Draw(_spriteBatch);
                     break;
                 case GameStates.GameOver:
@@ -369,7 +369,6 @@ namespace Lab4_Kiana_Leslie
                     _spriteBatch.DrawString(font, gameOver, gameOverPos, Color.White);
                     _spriteBatch.DrawString(font, gameOver2, goPos, Color.White);
                     _spriteBatch.DrawString(font, gameOver3, scoreDisplay, Color.AliceBlue);
-                    hud.Draw(_spriteBatch);
                     break;
             }
             _spriteBatch.End();

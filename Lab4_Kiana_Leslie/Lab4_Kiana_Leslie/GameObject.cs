@@ -93,6 +93,23 @@ namespace Lab4_Kiana_Leslie
                 projectile.Draw(spriteBatch);
             }
         }
+        internal virtual void Draw(SpriteBatch spriteBatch, Vector2 position)
+        {
+            switch (playerState)
+            {
+                case States.PlayerState.Alive:
+                    animationPlayer.Draw(spriteBatch, new Vector2(position.X + 30, position.Y - 15), SpriteEffects.None);
+                    break;
+                case States.PlayerState.Dying:
+                    break;
+                case States.PlayerState.Dead:
+                    break;
+            }
+            foreach (Projectile projectile in projectiles)
+            {
+                projectile.Draw(spriteBatch);
+            }
+        }
         internal void Move(Vector2 direction)
         {
             position += direction;

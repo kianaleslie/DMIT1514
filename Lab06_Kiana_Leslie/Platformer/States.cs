@@ -22,7 +22,7 @@ namespace Platformer
         }
         public enum GameStates
         {
-            Initalize,
+            //Initalize,
             Menu,
             LevelOne,
             Paused,

@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:blue-green.jpg
 
+#begin collectStar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:collectStar.png
+
 #begin ColliderBottom.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -272,18 +284,6 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:space-journey-hartzmann-main-version-15284-03-33.mp3
-
-#begin star.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:star.png
 
 #begin stars.png
 /importer:TextureImporter

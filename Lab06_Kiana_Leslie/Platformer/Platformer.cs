@@ -34,13 +34,14 @@ namespace Platformer
         private SpriteFont font;
         private SpriteFont italicFont;
         private States.GameStates gameState;
+        private States.CollectableState starState;
         private KeyboardState keyState;
         private Song song;
         private Rectangle GameBox = new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT);
         private Player player;
         private Collider ground;
         private Platforms[] platforms;
-        private Collectable star;
+        private Collectable[] star;
 
         public Platformer()
         {
@@ -76,7 +77,17 @@ namespace Platformer
             platforms[7] = new Platforms(new Vector2(900, 300), new Vector2(100, 25));
             platforms[8] = new Platforms(new Vector2(600, 200), new Vector2(100, 25));
             platforms[9] = new Platforms(new Vector2(75, 100), new Vector2(100, 25));
-            //star = new Collectable(game, starTexture, new Vector2(100, 100));
+            star = new Collectable[10];
+            star[0] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(90, 600));
+            star[1] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(280, 500));
+            star[2] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(130, 325));
+            star[3] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(380, 200));
+            star[4] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(530, 350));
+            star[5] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(630, 600));
+            star[6] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(830, 500));
+            star[7] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(930, 250));
+            star[8] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(630, 150));
+            star[9] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(105, 50));
 
             base.Initialize();
 
@@ -102,7 +113,10 @@ namespace Platformer
             font = Content.Load<SpriteFont>("Megrim-Regular");
             italicFont = Content.Load<SpriteFont>("Ysabeau-Italic-VariableFont_wght");
             song = Content.Load<Song>("space-journey-hartzmann-main-version-15284-03-33");
-
+            foreach(Collectable stars in star)
+            {
+                stars.LoadContent(Content);
+            }
             player.LoadContent(Content);
             ground.LoadContent(Content);
             foreach (Platforms platforms in platforms)
@@ -252,6 +266,14 @@ namespace Platformer
                     {
                         platform.Draw(_spriteBatch);
                     }
+                    if (starState == States.CollectableState.Collectable)
+                    {
+                        foreach (Collectable stars in star)
+                        {
+                            stars.Draw(_spriteBatch);
+                        }
+                    }
+                    
                     break;
                 case States.GameStates.Paused:
 

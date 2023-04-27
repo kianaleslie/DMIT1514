@@ -1,55 +1,89 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System.Drawing;
-using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Platformer
 {
-    public class Collectable : GameObject
+    public class Collectable
     {
-        public Collectable(Game game) : base(game)
-        {
-
-        }
-        private bool isCollected;
+        private Texture2D texture;
+        private Vector2 pos;
+        private Rectangle box;
+        States.CollectableState starState;
+        bool collected;
         Player player;
-        public Collectable(Game game, Texture2D texture, Vector2 startPosition) : base(game)
+
+        public Collectable(Texture2D texture, Vector2 position)
         {
-            //transform = new Transform(startPosition);
             this.texture = texture;
-            rectangle = new Rectangle((int)startPosition.X, (int)startPosition.Y, texture.Width, texture.Height);
-            isCollected = false;
+            pos = position;
+            box = new Rectangle((int)pos.X, (int)pos.Y, this.texture.Width, this.texture.Height);
+            collected = false;
         }
 
-        public override void Update(GameTime gameTime)
+        internal void Initialize(Vector2 position, Rectangle bBox)
         {
-            if (!isCollected)
-            {
-                // Check if the coin has been collected by the player.
-                // You could replace this with more complex collision detection logic.
-                Rectangle playerRect = player.Box; // Get the player's rectangle.
-                if (rectangle.Intersects(playerRect))
-                {
-                    isCollected = true;
-                    // Add the coin to the player's inventory or increase the player's score.
-                }
-            }
-
-            base.Update(gameTime);
+            pos = position;
+            box = bBox;
         }
 
-        public override void Draw(GameTime gameTime)
+        internal void LoadContent(ContentManager content)
         {
-            if (!isCollected)
-            {
-                spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-                spriteBatch.Draw(texture, transform._position, texture.Bounds, Color.White, transform._rotation, texture.Bounds.Center.ToVector2(), transform._scale, SpriteEffects.None, 0);
-                spriteBatch.End();
-            }
+            texture = content.Load<Texture2D>("collectStar");
+        }
 
-            base.Draw(gameTime);
+        internal void Update(GameTime gameTime)
+        {
+            switch (starState)
+            {
+                case States.CollectableState.Collectable:
+                    if (box.Intersects(player.bBox) && !collected)
+                    {
+                        collected = true;
+                        starState = States.CollectableState.Collected;
+                        Collect();
+                    }
+                    break;
+                case States.CollectableState.Collected:
+                    //Do nothing, star has already been collected
+                    break;
+                case States.CollectableState.NotCollectable:
+                    //Do nothing, star cannot be collected
+                    break;
+            }
+        }
+
+        internal void Draw(SpriteBatch spriteBatch)
+        {
+            switch (starState)
+            {
+                case States.CollectableState.Collectable:
+                    if (!collected)
+                    {
+                        spriteBatch.Draw(texture, pos, Color.White);
+                    }
+                    if (collected)
+                    {
+
+                    }
+                    break;
+                case States.CollectableState.Collected:
+                    //Do nothing, star has already been collected
+                    break;
+                case States.CollectableState.NotCollectable:
+                    //Do nothing, star cannot be collected
+                    break;
+            }
+        }
+        public void Collect()
+        {
+            collected = true;
+        }
+
+        public bool IsCollected()
+        {
+            return collected;
         }
     }
 }

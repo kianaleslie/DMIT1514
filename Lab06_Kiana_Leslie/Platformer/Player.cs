@@ -21,6 +21,7 @@ namespace Platformer
         public Rectangle bBox;
         internal Vector2 Velocity { get { return vel; } }
         internal Rectangle Box { get { return new Rectangle((int)pos.X, (int)pos.Y, (int)dim.X, (int)dim.Y); } }
+        public int Stars { get; private set; }
         public Player(Vector2 position, Rectangle bBox)
         {
             pos = position;
@@ -133,6 +134,11 @@ namespace Platformer
             {
                 vel.Y = JUMP;
             }
+        }
+        public void CollectStar(Collectable star)
+        {
+            Stars++;
+            star.Collect();
         }
     }
 }

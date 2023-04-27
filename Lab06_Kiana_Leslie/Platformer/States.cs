@@ -11,7 +11,7 @@ namespace Platformer
         public enum CollectableState
         {
             Collectable,
-            Colleted,
+            Collected,
             NotCollectable
         }
         public enum PlayerState

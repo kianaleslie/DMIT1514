@@ -9,43 +9,43 @@ namespace Platformer
     {
         protected Texture2D texture;
         protected string textureName;
-        protected Vector2 position;
-        protected Vector2 dimensions;
+        protected Vector2 pos;
+        protected Vector2 dim;
 
-        protected Collider colliderTop;
-        protected Collider colliderRight;
-        protected Collider colliderBottom;
-        protected Collider colliderLeft;
+        protected Collider colTop;
+        protected Collider colRight;
+        protected Collider colBottom;
+        protected Collider colLeft;
 
         public Platforms(Vector2 position, Vector2 dimensions, string textureName)
         {
             this.textureName = textureName;
-            colliderTop = new Collider(new Vector2(position.X + 3, position.Y), new Vector2(dimensions.X - 6, 1));
-            colliderRight = new Collider(new Vector2(position.X + dimensions.X - 1, position.Y + 1), new Vector2(1, dimensions.Y - 2));
-            colliderBottom = new Collider(new Vector2(position.X + 3, position.Y + dimensions.Y), new Vector2(dimensions.X - 6, 1));
-            colliderLeft = new Collider(new Vector2(position.X, position.Y + 1), new Vector2(1, dimensions.Y - 2));
+            colTop = new Collider(new Vector2(position.X + 3, position.Y), new Vector2(dimensions.X - 6, 1));
+            colRight = new Collider(new Vector2(position.X + dimensions.X - 1, position.Y + 1), new Vector2(1, dimensions.Y - 2));
+            colBottom = new Collider(new Vector2(position.X + 3, position.Y + dimensions.Y), new Vector2(dimensions.X - 6, 1));
+            colLeft = new Collider(new Vector2(position.X, position.Y + 1), new Vector2(1, dimensions.Y - 2));
         }
         internal void LoadContent(ContentManager Content)
         {
-            colliderTop.LoadContent(Content);
-            colliderRight.LoadContent(Content);
-            colliderBottom.LoadContent(Content);
-            colliderLeft.LoadContent(Content);
+            colTop.LoadContent(Content);
+            colRight.LoadContent(Content);
+            colBottom.LoadContent(Content);
+            colLeft.LoadContent(Content);
         }
         internal void Draw(SpriteBatch spriteBatch)
         {
-            colliderTop.Draw(spriteBatch);
-            colliderRight.Draw(spriteBatch);
-            colliderBottom.Draw(spriteBatch);
-            colliderLeft.Draw(spriteBatch);
+            colTop.Draw(spriteBatch);
+            colRight.Draw(spriteBatch);
+            colBottom.Draw(spriteBatch);
+            colLeft.Draw(spriteBatch);
         }
 
         internal void ProcessCollisions(Player player)
         {
-            colliderTop.ProcessCollisions(player);
-            colliderRight.ProcessCollisions(player);
-            colliderBottom.ProcessCollisions(player);
-            colliderLeft.ProcessCollisions(player);
+            colTop.IsColliding(player);
+            colRight.IsColliding(player);
+            colBottom.IsColliding(player);
+            colLeft.IsColliding(player);
         }
     }
 }

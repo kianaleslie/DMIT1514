@@ -8,21 +8,21 @@ namespace Platformer
     public class Collider
     {
         public Texture2D texture;
-        public Vector2 position;
-        public Vector2 dimensions;
+        public Vector2 pos;
+        public Vector2 dim;
 
-        internal Rectangle BoundingBox
+        internal Rectangle BBox
         {
             get
             {
-                return new Rectangle((int)position.X, (int)position.Y, (int)dimensions.X, (int)dimensions.Y);
+                return new Rectangle((int)pos.X, (int)pos.Y, (int)dim.X, (int)dim.Y);
             }
         }
 
         public Collider(Vector2 position, Vector2 dimensions)
         {
-            this.position = position;
-            this.dimensions = dimensions;
+            pos = position;
+            dim = dimensions;
         }
 
         internal void LoadContent(ContentManager Content)
@@ -32,10 +32,10 @@ namespace Platformer
 
         internal void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, BoundingBox, new Rectangle(0, 0, 1, 1), Color.White);
+            spriteBatch.Draw(texture, BBox, new Rectangle(0, 0, 1, 1), Color.White);
         }
 
-        internal virtual bool ProcessCollisions(Player player)
+        internal virtual bool IsColliding(Player player)
         {
             return false;
         }

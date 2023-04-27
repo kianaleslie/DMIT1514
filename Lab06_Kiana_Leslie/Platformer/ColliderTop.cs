@@ -11,16 +11,15 @@ namespace Platformer
 
         }
 
-        internal override bool ProcessCollisions(Player player)
+        internal override bool IsColliding(Player player)
         {
             bool didCollide = false;
-            if (BoundingBox.Intersects(player.Box))
+            if (BBox.Intersects(player.Box))
             {
                 didCollide = true;
-                player.Land(player, BoundingBox);
-                player.StandOn(player, BoundingBox);
+                player.Land(player, BBox);
+                player.StandOn(player, BBox);
             }
-
             return didCollide;
         }
     }

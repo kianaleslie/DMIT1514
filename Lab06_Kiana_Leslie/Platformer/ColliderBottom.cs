@@ -8,12 +8,13 @@ namespace Platformer
     {
         public ColliderBottom(Vector2 position, Vector2 dimensions) : base(position, dimensions)
         {
+
         }
 
-        internal override bool ProcessCollisions(Player player)
+        internal override bool IsColliding(Player player)
         {
             bool didCollide = false;
-            if (BoundingBox.Intersects(player.Box))
+            if (BBox.Intersects(player.Box))
             {
                 didCollide = true;
                 if (player.Velocity.Y < 0)
@@ -21,7 +22,6 @@ namespace Platformer
                     player.MoveVertically(player, 0);
                 }
             }
-
             return didCollide;
         }
     }

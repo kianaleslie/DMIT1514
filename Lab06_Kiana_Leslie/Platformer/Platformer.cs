@@ -13,7 +13,7 @@ namespace Platformer
         public const int WINDOWWIDTH = 1080;
         public const int WINDOWHEIGHT = 720;
         private string message;
-        //private float timer = 3f;
+        //public float speed;
         private Texture2D gameBackgroundTexture;
         private Texture2D menuBackgroundTexture;
         private Texture2D starTexture;
@@ -34,8 +34,12 @@ namespace Platformer
         private SpriteFont font;
         private SpriteFont italicFont;
         private States.GameStates gameState;
-        private KeyboardState keyState, previousKeyState;
+        private KeyboardState keyState;
         private Song song;
+        //public CelAnimationSequence player;
+        //public CelAnimationPlayer animationPlayer;
+        //public Vector2 position;
+        //public Rectangle bBox;
 
         public Platformer()
         {
@@ -55,6 +59,8 @@ namespace Platformer
             planet2Direction = new Vector2(3f, 3f);
             planet3Direction = new Vector2(7f, 7f);
             base.Initialize();
+            //animationPlayer = new();
+            //animationPlayer.Play(player);
             starRectangle = starTexture.Bounds;
             planet0Rectangle = planet0Texture.Bounds;
             planet1Rectangle = planet1Texture.Bounds;
@@ -76,6 +82,7 @@ namespace Platformer
             font = Content.Load<SpriteFont>("Megrim-Regular");
             italicFont = Content.Load<SpriteFont>("Ysabeau-Italic-VariableFont_wght");
             song = Content.Load<Song>("space-journey-hartzmann-main-version-15284-03-33");
+            //player =  new CelAnimationSequence(Content.Load<Texture2D>("wizard"), 31, 32, 1 / 8.0f);
         }
 
         protected override void Update(GameTime gameTime)
@@ -143,9 +150,30 @@ namespace Platformer
                         message = "Paused...";
                         MediaPlayer.Pause();
                     }
+                    //if (keys.IsKeyDown(Keys.Left))
+                    //{
+                    //    animation.Move(new Vector2(-1, 0) * speed);
+                    //}
+                    //else if (keys.IsKeyDown(Keys.Right))
+                    //{
+                    //    player.Move(new Vector2(1, 0) * speed);
+                    //}
+                    //else
+                    //{
+                    //    player.Move(new Vector2(0, 0) * speed);
+                    //}
+                    //if (Box.Left < bBox.Left)
+                    //{
+                    //    position.X = bBox.Left;
+                    //}
+                    //else if (Box.Right > bBox.Right)
+                    //{
+                    //    position.X = bBox.Right - Box.Width;
+                    //}
+
+                    //animationPlayer.Update(gameTime);
                     break;
                 case States.GameStates.Paused:
-                    //MediaPlayer.Stop();
                     if (keys.IsKeyDown(Keys.P) && keyState.IsKeyUp(Keys.P))
                     {
                         gameState = States.GameStates.LevelOne;
@@ -201,5 +229,16 @@ namespace Platformer
             _spriteBatch.End();
             base.Draw(gameTime);
         }
+        //internal Rectangle Box
+        //{
+        //    get
+        //    {
+        //        return new Rectangle((int)position.X, (int)position.Y, animation.CelWidth, animation.CelHeight);
+        //    }
+        //}
+        //internal void Move(Vector2 direction)
+        //{
+        //    position += direction;
+        //}
     }
 }

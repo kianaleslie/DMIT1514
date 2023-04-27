@@ -1,10 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Platformer
 {
@@ -16,7 +11,7 @@ namespace Platformer
         // Each child should overrode/make a new spritebatch.
         // Objects of the same class can share the spritebatch.
         public static SpriteBatch spriteBatch;
-
+      
         public GameObject(Game game) : base(game)
         {
             // Add more to the constructor.

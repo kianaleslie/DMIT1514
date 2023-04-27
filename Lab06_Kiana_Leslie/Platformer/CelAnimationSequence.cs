@@ -23,13 +23,13 @@ public class CelAnimationSequence
     /// <summary>
     /// Constructs a new CelAnimationSequence.
     /// </summary>        
-    public CelAnimationSequence(Texture2D texture, int celWidth, float celTime)
+    public CelAnimationSequence(Texture2D texture, int celHeight, int celWidth, float celTime)
     {
         this.texture = texture;
         this.celWidth = celWidth;
         this.celTime = celTime;
 
-        celHeight = Texture.Height;
+        this.celHeight = celHeight;
         celCount = Texture.Width / celWidth;
     }
 

@@ -16,9 +16,9 @@ namespace Platformer
         }
         public enum PlayerState
         {
-            Alive,
-            Dying,
-            Dead
+            Idle,
+            Walking,
+            Jumping
         }
         public enum GameStates
         {

@@ -25,9 +25,9 @@ namespace Platformer
             this.dimensions = dimensions;
         }
 
-        internal void LoadContent(ContentManager Content, string textureString)
+        internal void LoadContent(ContentManager Content)
         {
-            texture = Content.Load<Texture2D>(textureString);
+            texture = Content.Load<Texture2D>("rock0");
         }
 
         internal void Draw(SpriteBatch spriteBatch)

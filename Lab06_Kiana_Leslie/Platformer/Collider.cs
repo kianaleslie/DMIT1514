@@ -19,7 +19,7 @@ namespace Platformer
         }
         internal void LoadContent(ContentManager Content)
         {
-            texture = Content.Load<Texture2D>("ColliderBottom");
+            texture = Content.Load<Texture2D>("platform101");
         }
         internal void Draw(SpriteBatch spriteBatch)
         {

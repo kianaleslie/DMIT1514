@@ -34,7 +34,6 @@ namespace Platformer
         private SpriteFont font;
         private SpriteFont italicFont;
         private States.GameStates gameState;
-        private States.CollectableState starState;
         private KeyboardState keyState;
         private Song song;
         private Rectangle GameBox = new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT);
@@ -66,6 +65,7 @@ namespace Platformer
 
             player = new Player(new Vector2(200, 680), GameBox);
             ground = new ColliderTop(new Vector2(0, 720), new Vector2(WINDOWWIDTH, 1));
+
             platforms = new Platforms[10];
             platforms[0] = new Platforms(new Vector2(50, 650), new Vector2(100, 25));
             platforms[1] = new Platforms(new Vector2(250, 550), new Vector2(100, 25));
@@ -77,6 +77,7 @@ namespace Platformer
             platforms[7] = new Platforms(new Vector2(900, 300), new Vector2(100, 25));
             platforms[8] = new Platforms(new Vector2(600, 200), new Vector2(100, 25));
             platforms[9] = new Platforms(new Vector2(75, 100), new Vector2(100, 25));
+
             star = new Collectable[10];
             star[0] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(90, 600));
             star[1] = new Collectable(Content.Load<Texture2D>("collectStar"), new Vector2(280, 500));
@@ -113,10 +114,6 @@ namespace Platformer
             font = Content.Load<SpriteFont>("Megrim-Regular");
             italicFont = Content.Load<SpriteFont>("Ysabeau-Italic-VariableFont_wght");
             song = Content.Load<Song>("space-journey-hartzmann-main-version-15284-03-33");
-            foreach(Collectable stars in star)
-            {
-                stars.LoadContent(Content);
-            }
             player.LoadContent(Content);
             ground.LoadContent(Content);
             foreach (Platforms platforms in platforms)
@@ -212,7 +209,16 @@ namespace Platformer
                     {
                         platform.Collisions(player);
                     }
+                    foreach (Collectable collectable in star)
+                    {
+                        collectable.Update(gameTime);
+                        player.CollectStar(collectable);
+                    }
                     player.Update(gameTime);
+                    if (player.Stars == 10)
+                    {
+                        gameState = States.GameStates.GameOver;
+                    }
                     break;
                 case States.GameStates.Paused:
 
@@ -225,6 +231,51 @@ namespace Platformer
                     break;
                 case States.GameStates.GameOver:
 
+                    if (starRectangle.Bottom > WINDOWHEIGHT || starRectangle.Top < 0)
+                    {
+                        starDirection.Y *= -1;
+                    }
+                    if (starRectangle.Left < 0 || starRectangle.Right > WINDOWWIDTH)
+                    {
+                        starDirection.X *= -1;
+                    }
+                    starRectangle.Offset(starDirection);
+                    if (planet0Rectangle.Bottom > WINDOWHEIGHT || planet0Rectangle.Top < 0)
+                    {
+                        planet0Direction.Y *= -1;
+                    }
+                    if (planet0Rectangle.Left < 0 || planet0Rectangle.Right > WINDOWWIDTH)
+                    {
+                        planet0Direction.X *= -1;
+                    }
+                    planet0Rectangle.Offset(planet0Direction);
+                    if (planet1Rectangle.Bottom > WINDOWHEIGHT || planet1Rectangle.Top < 0)
+                    {
+                        planet1Direction.Y *= -1;
+                    }
+                    if (planet1Rectangle.Left < 0 || planet1Rectangle.Right > WINDOWWIDTH)
+                    {
+                        planet1Direction.X *= -1;
+                    }
+                    planet1Rectangle.Offset(planet1Direction);
+                    if (planet2Rectangle.Bottom > WINDOWHEIGHT || planet2Rectangle.Top < 0)
+                    {
+                        planet2Direction.Y *= -1;
+                    }
+                    if (planet2Rectangle.Left < 0 || planet2Rectangle.Right > WINDOWWIDTH)
+                    {
+                        planet2Direction.X *= -1;
+                    }
+                    planet2Rectangle.Offset(planet2Direction);
+                    if (planet3Rectangle.Bottom > WINDOWHEIGHT || planet3Rectangle.Top < 0)
+                    {
+                        planet3Direction.Y *= -1;
+                    }
+                    if (planet3Rectangle.Left < 0 || planet3Rectangle.Right > WINDOWWIDTH)
+                    {
+                        planet3Direction.X *= -1;
+                    }
+                    planet3Rectangle.Offset(planet3Direction);
                     break;
             }
             keyState = Keyboard.GetState();
@@ -259,21 +310,17 @@ namespace Platformer
                 case States.GameStates.LevelOne:
                     
                    _spriteBatch.Draw(gameBackgroundTexture, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
-                    _spriteBatch.DrawString(font, "Collect 5 stars to win!", new Vector2(250, 5), Color.White);
+                    _spriteBatch.DrawString(font, "Collect all the stars to win!", new Vector2(180, 5), Color.White);
                     player.Draw(_spriteBatch);
                     ground.Draw(_spriteBatch);
                     foreach (Platforms platform in platforms)
                     {
                         platform.Draw(_spriteBatch);
                     }
-                    if (starState == States.CollectableState.Collectable)
+                    foreach (Collectable stars in star)
                     {
-                        foreach (Collectable stars in star)
-                        {
-                            stars.Draw(_spriteBatch);
-                        }
+                        stars.Draw(_spriteBatch);
                     }
-                    
                     break;
                 case States.GameStates.Paused:
 
@@ -282,6 +329,20 @@ namespace Platformer
                     break;
                 case States.GameStates.GameOver:
 
+                    _spriteBatch.Draw(menuBackgroundTexture, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
+                    string gO = "Game Over!";
+                    string gO1 = "I hope you had fun!";
+                    Vector2 ms = font.MeasureString(gO);
+                    Vector2 msg = font.MeasureString(gO1);
+                    Vector2 msPos = new Vector2((WINDOWWIDTH - ms.X) / 2, (WINDOWHEIGHT - ms.Y) / 4);
+                    Vector2 msgPos = new Vector2((WINDOWWIDTH - msg.X) / 2, (WINDOWHEIGHT - msg.Y) / 2);
+                    _spriteBatch.DrawString(font, gO, msPos, Color.White);
+                    _spriteBatch.DrawString(font, gO1, msgPos, Color.White);
+                    _spriteBatch.Draw(starTexture, starRectangle.Location.ToVector2(), Color.White);
+                    _spriteBatch.Draw(planet0Texture, planet0Rectangle.Location.ToVector2(), Color.White);
+                    _spriteBatch.Draw(planet1Texture, planet1Rectangle.Location.ToVector2(), Color.White);
+                    _spriteBatch.Draw(planet2Texture, planet2Rectangle.Location.ToVector2(), Color.White);
+                    _spriteBatch.Draw(planet3Texture, planet3Rectangle.Location.ToVector2(), Color.White);
                     break;
             }
             _spriteBatch.End();

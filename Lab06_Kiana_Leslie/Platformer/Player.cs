@@ -25,7 +25,8 @@ namespace Platformer
         public Player(Vector2 position, Rectangle bBox)
         {
             pos = position;
-            this.bBox = bBox;
+            this.bBox.Location = pos.ToPoint();
+            //this.bBox = bBox;
             dim = new Vector2(46, 40);
             animationPlayer = new();
         }
@@ -42,6 +43,7 @@ namespace Platformer
         }
         internal void Update(GameTime gameTime)
         {
+            bBox.Location = pos.ToPoint();
             animationPlayer.Update(gameTime);
             vel.Y += Platformer.GRAV;
             pos += vel * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -137,8 +139,11 @@ namespace Platformer
         }
         public void CollectStar(Collectable star)
         {
-            Stars++;
-            star.Collect();
+            if (star.starState == States.CollectableState.Collectable && bBox.Intersects(star.box))
+            {
+                Stars++;
+                star.Collect();
+            }
         }
     }
 }

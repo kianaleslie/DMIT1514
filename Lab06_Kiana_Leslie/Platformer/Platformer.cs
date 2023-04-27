@@ -12,6 +12,7 @@ namespace Platformer
 
         public const int WINDOWWIDTH = 1080;
         public const int WINDOWHEIGHT = 720;
+        public const int GRAV = 3;
         private string message;
         //public float speed;
         private Texture2D gameBackgroundTexture;
@@ -36,10 +37,10 @@ namespace Platformer
         private States.GameStates gameState;
         private KeyboardState keyState;
         private Song song;
-        //public CelAnimationSequence player;
-        //public CelAnimationPlayer animationPlayer;
-        //public Vector2 position;
-        //public Rectangle bBox;
+        private Rectangle GameBox = new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT);
+        private Player player;
+        private Collider ground;
+        private Platforms[] platforms;
 
         public Platformer()
         {
@@ -58,15 +59,22 @@ namespace Platformer
             planet1Direction = new Vector2(4f, 4f);
             planet2Direction = new Vector2(3f, 3f);
             planet3Direction = new Vector2(7f, 7f);
+            _graphics.ApplyChanges();
+            player = new Player(new Vector2(250, 50), GameBox);
+            ground = new Collider(new Vector2(0, 300), new Vector2(WINDOWWIDTH, 1));
+            platforms = new Platforms[4];
+            platforms[0] = new Platforms(new Vector2(50, 100), new Vector2(50, 25), "rock0");
+            platforms[1] = new Platforms(new Vector2(150, 150), new Vector2(50, 25), "rock1");
+            platforms[2] = new Platforms(new Vector2(250, 200), new Vector2(50, 25), "rock2");
+            platforms[3] = new Platforms(new Vector2(350, 250), new Vector2(50, 25), "rock0");
+
             base.Initialize();
-            //animationPlayer = new();
-            //animationPlayer.Play(player);
+            player.Initialize();
             starRectangle = starTexture.Bounds;
             planet0Rectangle = planet0Texture.Bounds;
             planet1Rectangle = planet1Texture.Bounds;
             planet2Rectangle = planet2Texture.Bounds;
             planet3Rectangle = planet3Texture.Bounds;
-            _graphics.ApplyChanges();
         }
 
         protected override void LoadContent()
@@ -82,7 +90,13 @@ namespace Platformer
             font = Content.Load<SpriteFont>("Megrim-Regular");
             italicFont = Content.Load<SpriteFont>("Ysabeau-Italic-VariableFont_wght");
             song = Content.Load<Song>("space-journey-hartzmann-main-version-15284-03-33");
-            //player =  new CelAnimationSequence(Content.Load<Texture2D>("wizard"), 31, 32, 1 / 8.0f);
+            player.LoadContent(Content);
+            ground.LoadContent(Content);
+            foreach (Platforms platforms in platforms)
+            {
+                platforms.LoadContent(Content);
+            }
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -91,6 +105,7 @@ namespace Platformer
             switch (gameState)
             {
                 case States.GameStates.Menu:
+
                     MediaPlayer.Play(song);
                     if (Mouse.GetState().LeftButton == ButtonState.Pressed)
                     {
@@ -141,39 +156,40 @@ namespace Platformer
                         planet3Direction.X *= -1;
                     }
                     planet3Rectangle.Offset(planet3Direction);
-
                     break;
                 case States.GameStates.LevelOne:
+
                     if (keys.IsKeyDown(Keys.P) && keyState.IsKeyUp(Keys.P))
                     {
                         gameState = States.GameStates.Paused;
                         message = "Paused...";
                         MediaPlayer.Pause();
                     }
-                    //if (keys.IsKeyDown(Keys.Left))
-                    //{
-                    //    animation.Move(new Vector2(-1, 0) * speed);
-                    //}
-                    //else if (keys.IsKeyDown(Keys.Right))
-                    //{
-                    //    player.Move(new Vector2(1, 0) * speed);
-                    //}
-                    //else
-                    //{
-                    //    player.Move(new Vector2(0, 0) * speed);
-                    //}
-                    //if (Box.Left < bBox.Left)
-                    //{
-                    //    position.X = bBox.Left;
-                    //}
-                    //else if (Box.Right > bBox.Right)
-                    //{
-                    //    position.X = bBox.Right - Box.Width;
-                    //}
-
-                    //animationPlayer.Update(gameTime);
+                    if (keys.IsKeyDown(Keys.Left))
+                    {
+                        player.MoveHorizontally(-1);
+                    }
+                    else if (keys.IsKeyDown(Keys.Right))
+                    {
+                        player.MoveHorizontally(1);
+                    }
+                    else
+                    {
+                        player.Stop();
+                    }
+                    if (keys.IsKeyDown(Keys.Space))
+                    {
+                        player.Jump();
+                    }
+                    ground.IsColliding(player);
+                    foreach (Platforms platform in platforms)
+                    {
+                        platform.ProcessCollisions(player);
+                    }
+                    player.Update(gameTime);
                     break;
                 case States.GameStates.Paused:
+
                     if (keys.IsKeyDown(Keys.P) && keyState.IsKeyUp(Keys.P))
                     {
                         gameState = States.GameStates.LevelOne;
@@ -181,9 +197,8 @@ namespace Platformer
                         MediaPlayer.Resume();
                     }
                     break;
-                case States.GameStates.LevelTwo:
-                    break;
                 case States.GameStates.GameOver:
+
                     break;
             }
             keyState = Keyboard.GetState();
@@ -195,6 +210,7 @@ namespace Platformer
             switch (gameState)
             {
                 case States.GameStates.Menu:
+
                     _spriteBatch.Draw(menuBackgroundTexture, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
                     string message1 = "Welcome to Space Jump!";
                     string message2 = "click anywhere to start the adventure!";
@@ -215,30 +231,26 @@ namespace Platformer
                     _spriteBatch.Draw(planet3Texture, planet3Rectangle.Location.ToVector2(), Color.White);
                     break;
                 case States.GameStates.LevelOne:
+
                     _spriteBatch.Draw(gameBackgroundTexture, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
+                    player.Draw(_spriteBatch);
+                    ground.Draw(_spriteBatch);
+                    foreach (Platforms platform in platforms)
+                    {
+                        platform.Draw(_spriteBatch);
+                    }
                     break;
                 case States.GameStates.Paused:
+
                     _spriteBatch.Draw(menuBackgroundTexture, Vector2.Zero, Color.White);
                     _spriteBatch.DrawString(font, message, new Vector2(450, 300), Color.White);
                     break;
-                case States.GameStates.LevelTwo:
-                    break;
                 case States.GameStates.GameOver:
+
                     break;
             }
             _spriteBatch.End();
             base.Draw(gameTime);
         }
-        //internal Rectangle Box
-        //{
-        //    get
-        //    {
-        //        return new Rectangle((int)position.X, (int)position.Y, animation.CelWidth, animation.CelHeight);
-        //    }
-        //}
-        //internal void Move(Vector2 direction)
-        //{
-        //    position += direction;
-        //}
     }
 }

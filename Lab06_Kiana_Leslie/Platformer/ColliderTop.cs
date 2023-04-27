@@ -17,8 +17,8 @@ namespace Platformer
             if (BBox.Intersects(player.Box))
             {
                 didCollide = true;
-                player.Land(player, BBox);
-                player.StandOn(player, BBox);
+                player.Land(BBox);
+                player.StandOn(BBox);
             }
             return didCollide;
         }

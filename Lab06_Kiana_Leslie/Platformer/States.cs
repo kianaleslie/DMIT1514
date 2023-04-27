@@ -26,7 +26,7 @@ namespace Platformer
             Menu,
             LevelOne,
             Paused,
-            LevelTwo,
+            //LevelTwo,
             GameOver
         }
     }

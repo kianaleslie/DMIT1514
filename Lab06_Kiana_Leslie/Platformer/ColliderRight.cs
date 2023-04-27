@@ -19,7 +19,7 @@ namespace Platformer
                 didCollide = true;
                 if (player.Velocity.X < 0)
                 {
-                    player.MoveHorizontally(player, 0);
+                    player.MoveHorizontally(0);
                 }
             }
             return didCollide;

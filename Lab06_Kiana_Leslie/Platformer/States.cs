@@ -17,7 +17,7 @@ namespace Platformer
         public enum PlayerState
         {
             Idle,
-            Walking,
+            Running,
             Jumping
         }
         public enum GameStates

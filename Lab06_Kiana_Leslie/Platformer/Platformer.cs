@@ -245,6 +245,7 @@ namespace Platformer
                 case States.GameStates.LevelOne:
                     
                    _spriteBatch.Draw(gameBackgroundTexture, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
+                    _spriteBatch.DrawString(font, "Collect 5 stars to win!", new Vector2(250, 5), Color.White);
                     player.Draw(_spriteBatch);
                     ground.Draw(_spriteBatch);
                     foreach (Platforms platform in platforms)

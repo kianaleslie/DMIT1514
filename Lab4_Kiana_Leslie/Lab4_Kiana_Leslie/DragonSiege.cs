@@ -196,22 +196,22 @@ namespace Lab4_Kiana_Leslie
                     keyState = Keyboard.GetState();
                     break;
                 case GameStates.Paused:
-                    if (IsLvl1)
-                    {
+                    //if (IsLvl1)
+                    //{
                         if (keys.IsKeyDown(Keys.P) && keyState.IsKeyUp(Keys.P))
                         {
                             gameState = States.GameStates.LevelOne;
                             message = "Paused!";
                         }
-                    }
-                    else
-                    {
-                        if (keys.IsKeyDown(Keys.P) && keyState.IsKeyUp(Keys.P))
-                        {
-                            gameState = States.GameStates.LevelTwo;
-                            message = "Paused!";
-                        }
-                    }
+                    //}
+                    //else
+                    //{
+                    //    if (keys.IsKeyDown(Keys.P) && keyState.IsKeyUp(Keys.P))
+                    //    {
+                    //        gameState = States.GameStates.LevelTwo;
+                    //        message = "Paused!";
+                    //    }
+                    //}
                     break;
                 case GameStates.LevelTwo:
                     gameState = States.GameStates.LevelTwo;

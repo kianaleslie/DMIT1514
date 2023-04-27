@@ -12,9 +12,8 @@ namespace Platformer
 
         public const int WINDOWWIDTH = 1080;
         public const int WINDOWHEIGHT = 720;
-        public const int GRAV = 3;
+        public const int GRAV = 4;
         private string message;
-        //public float speed;
         private Texture2D gameBackgroundTexture;
         private Texture2D menuBackgroundTexture;
         private Texture2D starTexture;
@@ -41,6 +40,7 @@ namespace Platformer
         private Player player;
         private Collider ground;
         private Platforms[] platforms;
+        private Collectable star;
 
         public Platformer()
         {
@@ -53,22 +53,33 @@ namespace Platformer
 
         protected override void Initialize()
         {
+            MediaPlayer.Volume = 0.5f;
             gameState = States.GameStates.Menu;
             starDirection = new Vector2(7f, 7f);
             planet0Direction = new Vector2(5f, 5f);
             planet1Direction = new Vector2(4f, 4f);
             planet2Direction = new Vector2(3f, 3f);
             planet3Direction = new Vector2(7f, 7f);
+
             _graphics.ApplyChanges();
-            player = new Player(new Vector2(250, 50), GameBox);
-            ground = new Collider(new Vector2(0, 300), new Vector2(WINDOWWIDTH, 1));
-            platforms = new Platforms[4];
-            platforms[0] = new Platforms(new Vector2(50, 100), new Vector2(50, 25), "rock0");
-            platforms[1] = new Platforms(new Vector2(150, 150), new Vector2(50, 25), "rock1");
-            platforms[2] = new Platforms(new Vector2(250, 200), new Vector2(50, 25), "rock2");
-            platforms[3] = new Platforms(new Vector2(350, 250), new Vector2(50, 25), "rock0");
+
+            player = new Player(new Vector2(200, 680), GameBox);
+            ground = new ColliderTop(new Vector2(0, 720), new Vector2(WINDOWWIDTH, 1));
+            platforms = new Platforms[10];
+            platforms[0] = new Platforms(new Vector2(50, 650), new Vector2(100, 25));
+            platforms[1] = new Platforms(new Vector2(250, 550), new Vector2(100, 25));
+            platforms[2] = new Platforms(new Vector2(100, 375), new Vector2(100, 25));
+            platforms[3] = new Platforms(new Vector2(350, 250), new Vector2(100, 25));
+            platforms[4] = new Platforms(new Vector2(500, 400), new Vector2(100, 25));
+            platforms[5] = new Platforms(new Vector2(600, 650), new Vector2(100, 25));
+            platforms[6] = new Platforms(new Vector2(800, 550), new Vector2(100, 25));
+            platforms[7] = new Platforms(new Vector2(900, 300), new Vector2(100, 25));
+            platforms[8] = new Platforms(new Vector2(600, 200), new Vector2(100, 25));
+            platforms[9] = new Platforms(new Vector2(75, 100), new Vector2(100, 25));
+            //star = new Collectable(game, starTexture, new Vector2(100, 100));
 
             base.Initialize();
+
             player.Initialize();
             starRectangle = starTexture.Bounds;
             planet0Rectangle = planet0Texture.Bounds;
@@ -80,6 +91,7 @@ namespace Platformer
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
             menuBackgroundTexture = Content.Load<Texture2D>("menuBg");
             gameBackgroundTexture = Content.Load<Texture2D>("gameImg");
             starTexture = Content.Load<Texture2D>("stars");
@@ -90,13 +102,13 @@ namespace Platformer
             font = Content.Load<SpriteFont>("Megrim-Regular");
             italicFont = Content.Load<SpriteFont>("Ysabeau-Italic-VariableFont_wght");
             song = Content.Load<Song>("space-journey-hartzmann-main-version-15284-03-33");
+
             player.LoadContent(Content);
             ground.LoadContent(Content);
             foreach (Platforms platforms in platforms)
             {
                 platforms.LoadContent(Content);
             }
-
         }
 
         protected override void Update(GameTime gameTime)
@@ -184,7 +196,7 @@ namespace Platformer
                     ground.IsColliding(player);
                     foreach (Platforms platform in platforms)
                     {
-                        platform.ProcessCollisions(player);
+                        platform.Collisions(player);
                     }
                     player.Update(gameTime);
                     break;
@@ -231,8 +243,8 @@ namespace Platformer
                     _spriteBatch.Draw(planet3Texture, planet3Rectangle.Location.ToVector2(), Color.White);
                     break;
                 case States.GameStates.LevelOne:
-
-                    _spriteBatch.Draw(gameBackgroundTexture, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
+                    
+                   _spriteBatch.Draw(gameBackgroundTexture, new Rectangle(0, 0, WINDOWWIDTH, WINDOWHEIGHT), Color.White);
                     player.Draw(_spriteBatch);
                     ground.Draw(_spriteBatch);
                     foreach (Platforms platform in platforms)

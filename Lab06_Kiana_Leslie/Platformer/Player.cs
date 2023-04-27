@@ -37,7 +37,7 @@ namespace Platformer
         {
             idle = new CelAnimationSequence(content.Load<Texture2D>("Owlet_Monster_Idle_4"), 30, 32, 1 / 8f);
             run = new CelAnimationSequence(content.Load<Texture2D>("Owlet_Monster_Run_6"), 30, 32,  1 / 8f);
-            jump = new CelAnimationSequence(content.Load<Texture2D>("Owlet_Monster_Jump_8"), 30, 32,  1 / 8f);
+            jump = new CelAnimationSequence(content.Load<Texture2D>("Owlet_Monster_Jump_8"), 30 , 32,  1 / 8f);
         }
         internal void Update(GameTime gameTime)
         {

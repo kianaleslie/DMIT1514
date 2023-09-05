@@ -27,7 +27,6 @@ namespace Lab4_Kiana_Leslie
         }
         internal void Update(GameTime gameTime)
         {
-
             if (movementCount == 20)
             {
                 transform.Direction = new Vector2(0, 0);
@@ -43,7 +42,6 @@ namespace Lab4_Kiana_Leslie
                 movementCount++;
             }
             Move(transform.Direction);
-
         }
         internal void Draw(SpriteBatch spriteBatch)
         {
@@ -57,7 +55,7 @@ namespace Lab4_Kiana_Leslie
         {
             public Vector2 Position;
             public Vector2 Direction;
-            public Transform(Vector2 position, Vector2 direction, float rotation)
+            public Transform(Vector2 position, Vector2 direction)
             {
                 this.Position = position;
                 this.Direction = direction;
